@@ -1,0 +1,69 @@
+Pokemon class
+    Name as string const
+    Nickname as string
+    Pokemon type as Array of size 2 of ints
+    Level as int
+    XP as int
+    Moves as array of Moves
+    MaxHP as double
+    MaxAtt as double
+    MaxDef as double
+    MaxSpAtt as double
+    MaxSpDef as double
+    MaxSpd as double
+    TempHP as double
+    TempAtt as double
+    TempDef as double
+    TempSpAtt as double
+    TempSpDef as double
+    TempSpd as double
+
+    Extended Wild Pokemon class
+        XPos
+        Ypos
+
+Move class
+    Name as string
+    Stat affected as int
+    Damage as double
+    Type as int
+    MaxPP as int
+    PP as int
+
+Player Trainer
+    Playername as string
+    Vector of all Pokemon (top 6 are accessible without pokemon center)
+    Items as Vector of Items
+    Number of steps taken as int
+    Power rating as double
+    XPos as double
+    YPos as double
+
+Item class
+    Item Name as string
+    Item id as int
+    Number as int
+    Cost as int
+
+Map Class
+    2D array of chars
+    Vector of Pokemon
+    Vector of Trainers
+
+Game Loop:
+    Greet Player
+    Have the Player pick a Name
+    Initialize Player's trianer object
+    Choose starter
+    
+    Initialize Map by seed
+        Initialize trainers and Pokemon
+    Put Player on Map
+
+    While loop game loop{
+        Player Act
+        Check if terrain is notable
+        Check if wild pokemon
+    }
+
+    
