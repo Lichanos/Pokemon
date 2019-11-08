@@ -17,7 +17,7 @@ class Move{
     public:
         string getName();
         int getType();
-        int getStat()
+        int getStat();
         double getDamage();
         int getMaxPP();
         int getPP();
@@ -30,4 +30,5 @@ class Move{
         void decrementPP();
         void resetPP();
 
-}#endif
+};
+#endif

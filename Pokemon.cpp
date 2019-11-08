@@ -109,6 +109,11 @@ int initialize(){
             affinities[ii][jj] = stod(imports[ii][jj + 1]);
         }
     }
+
+    if(affinities[1][0] != 0 && imports[1][0] != ""){
+        return 1;
+    }
+    return 0;
 }
 
 Pokemon::Pokemon(){
@@ -321,7 +326,7 @@ double Pokemon::getSpdAffinity(){
     return spdAffinity;
 }
 
-string Pokemon::setNickname(string newName){
+void Pokemon::setNickname(string newName){
     nickname = newName;
 }
 

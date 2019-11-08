@@ -83,7 +83,7 @@ class Pokemon{
         double getSpDefAffinity();
         double getSpdAffinity();
 
-        string setNickname(string);
+        void setNickname(string);
         void setLevel(int);
         void setXp(int);
         void modHp(double);
