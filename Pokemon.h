@@ -14,12 +14,18 @@ class Pokemon{
         int level;
         int xp;
 
-        const double maxHp;
-        const double maxAtt;
-        const double maxDef;
-        const double maxSpAtt;
-        const double maxSpDef;
-        const double maxSpd;
+        int hpIv;
+        int attIv;
+        int defIv;
+        int spAttIv;
+        int spDefIv;
+        int spdIv;
+        double hpAffinity;
+        double attAffinity;
+        double defAffinity;
+        double spAttAfinity;
+        double spDefAffinity;
+        double spdAffinity;
         double tempHp;
         double tempAtt;
         double tempDef;
@@ -33,7 +39,7 @@ class Pokemon{
         Pokemon();
         Pokemon(int, int);
         string getName();
-        int const getId();
+        int getId();
         string getNickname();
         int getLevel();
         int getXp();
@@ -50,6 +56,19 @@ class Pokemon{
         double getTempSpDef();
         double getTempSpd();
 
+        int getHpIv();
+        int getAttIv();
+        int getDefIv();
+        int getSpAttIv();
+        int getSpDefIv();
+        int getSpdIv();
+        double getHpAffinity();
+        double getAttAffinity();
+        double getDefAffinity();
+        double getSpAttAfinity();
+        double getSpDefAffinity();
+        double getSpdAffinity();
+
         string setNickname(string);
         void setLevel(int);
         void setXp(int);
@@ -59,5 +78,7 @@ class Pokemon{
         void setTempSpAtt(double);
         void setTempSpDef(double);
         void getTempSpd(double);
+
+        void shuffleIvs();
 
 }#endif
