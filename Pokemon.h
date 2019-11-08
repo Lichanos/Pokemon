@@ -36,7 +36,8 @@ class Pokemon{
         double tempSpDef;
         double tempSpd;
 
-        string imports[151];
+        string imports[152][9];
+        double affinities[152][6];
     public:
         int type[2];
         Move moves[4];

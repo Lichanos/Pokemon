@@ -97,6 +97,7 @@ int initialize(){
         }
     }
     reader.close();
+    affinities[0][] = {"hp","att","def","spAtt","spDef","spd"};
     for(int ii = 1; ii < 151; ii++){
         for(int jj = 0; jj < 6; jj++){
             affinities[ii][jj] = stod(imports[ii][jj + 1]);
