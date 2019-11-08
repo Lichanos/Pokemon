@@ -23,7 +23,7 @@ class Item{
 
         void setName();
         void setId();
-        void addNumber()
+        void addNumber(int);
         void decrement();
         void setCost();
 }

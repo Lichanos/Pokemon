@@ -12,6 +12,7 @@ class Trainer{
         string playerName;
         vector<Pokemon> pokemon;
         vector<Item> items;
+        vector<string> badges;
         int steps;
         double power;
         int xPos;
@@ -28,6 +29,8 @@ class Trainer{
         void setName(string);
         void addPokemon(Pokemon);
         int releasePokemon(string);
+        int addItem(Item);
+        int addBadge(string);
         void moveUp();
         void moveDown();
         void moveLeft();
