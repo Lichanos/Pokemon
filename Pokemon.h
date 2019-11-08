@@ -2,12 +2,14 @@
 //CS1300 UCB 
 //Final Project - Pokemon Class
 
-#ifndef POKEMON_H
-#define POKEMON_H
 #include <string>
 #include <fstream>
+#include <math.h>
+#include "Move.h"
 using namespace std;
 
+#ifndef POKEMON_H
+#define POKEMON_H
 class Pokemon{
     private:
         string name;
@@ -15,8 +17,13 @@ class Pokemon{
         int id;
         int level;
         int xp;
-        string type[2] = {};
 
+        int maxHp;
+        int maxAtt;
+        int maxDef;
+        int maxSpAtt;
+        int maxSpDef;
+        int maxSpd;
         int hpIv;
         int attIv;
         int defIv;
@@ -26,7 +33,7 @@ class Pokemon{
         double hpAffinity;
         double attAffinity;
         double defAffinity;
-        double spAttAfinity;
+        double spAttAffinity;
         double spDefAffinity;
         double spdAffinity;
         double tempHp;
@@ -39,8 +46,8 @@ class Pokemon{
         string imports[152][9];
         double affinities[152][6];
     public:
-        int type[2];
-        Move moves[4];
+        string type[2] = {};
+        //Move moves[4];
 
         int split(string, char, string pieces[], int);
         Pokemon();
@@ -79,13 +86,14 @@ class Pokemon{
         string setNickname(string);
         void setLevel(int);
         void setXp(int);
-        void changeHp(double);
-        void setTempAtt(double);
-        void setTempDef(double);
-        void setTempSpAtt(double);
-        void setTempSpDef(double);
-        void getTempSpd(double);
+        void modHp(double);
+        void modAtt(double);
+        void modDef(double);
+        void modSpAtt(double);
+        void modSpDef(double);
+        void modSpd(double);
 
-        void shuffleIvs();
-
-}#endif
+        void levelUp();
+        void addXp(int n);
+};
+#endif

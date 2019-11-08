@@ -5,6 +5,7 @@
 #include "Pokemon.h"
 #include <string>
 #include <fstream>
+#include <math.h>
 using namespace std;
 
 string name;
@@ -14,6 +15,12 @@ int level;
 int xp;
 string type[2] = {};
 
+int maxHp;
+int maxAtt;
+int maxDef;
+int maxSpAtt;
+int maxSpDef;
+int maxSpd;
 int hpIv;
 int attIv;
 int defIv;
@@ -23,7 +30,7 @@ int spdIv;
 double hpAffinity;
 double attAffinity;
 double defAffinity;
-double spAttAfinity;
+double spAttAffinity;
 double spDefAffinity;
 double spdAffinity;
 double tempHp;
@@ -81,7 +88,7 @@ int split(string initial, char delimiter, string pieces[], int length){
 string imports[152][9] = {};
 double affinities[152][6] = {0};
 int initialize(){
-    imports[0][] = {"name","hp","att","def","spAtt","spDef","spd","type1","type2"};
+    //imports[0][] = {"name","hp","att","def","spAtt","spDef","spd","type1","type2"};
     ifstream reader;
     reader.open("pokemon.txt");
     if(reader.is_open()){
@@ -97,7 +104,6 @@ int initialize(){
         }
     }
     reader.close();
-    affinities[0][] = {"hp","att","def","spAtt","spDef","spd"};
     for(int ii = 1; ii < 151; ii++){
         for(int jj = 0; jj < 6; jj++){
             affinities[ii][jj] = stod(imports[ii][jj + 1]);
@@ -112,17 +118,13 @@ Pokemon::Pokemon(){
     nickname = "Pikachu";
     level = 5;
     xp = 0;
-    type[0] = imports[ID][8];
-    if(imports[9] != ""){
-        type[1] = imports[ID][9];
-    } else {
-        type[1] = "";
-    }
+    type[0] = imports[id][8];
+    type[1] = imports[id][9];
 
     hpAffinity = affinities[25][0];
     attAffinity = affinities[25][1];
     defAffinity = affinities[25][2];
-    spAttAfinity = affinities[25][3];
+    spAttAffinity = affinities[25][3];
     spDefAffinity = affinities[25][4];
     spdAffinity = affinities[25][5];
     hpIv = 0;
@@ -131,6 +133,29 @@ Pokemon::Pokemon(){
     spAttIv = 0;
     spDefIv = 0;
     spdIv = 0;
+
+    maxHp = 10 + hpAffinity;
+    maxAtt = 4 + attAffinity;
+    maxDef = 3 + defAffinity;
+    maxSpAtt = 4 + spAttAffinity;
+    maxSpDef = 3 + spDefAffinity;
+    maxSpd = 4 + spdAffinity;
+    for(double ii = 1.0; ii <= level; ii++){
+        maxHp += (pow(1.05,ii/10)*(3.5/4)*hpAffinity*(.9+(.2*hpIv/36)));
+        maxAtt += (pow(1.05,ii/10)*(3.5/4)*attAffinity*(.9+(.2*attIv/36)));
+        maxDef += (pow(1.05,ii/10)*(3.5/4)*defAffinity*(.9+(.2*defIv/36)));
+        maxSpAtt += (pow(1.05,ii/10)*(3.5/4)*spAttAffinity*(.9+(.2*spAttIv/36)));
+        maxSpDef += (pow(1.05,ii/10)*(3.5/4)*spDefAffinity*(.9+(.2*spDefIv/36)));
+        maxSpd += (pow(1.05,ii/10)*(3.5/4)*spdAffinity*(.9+(.2*spdIv/36)));
+    }
+    tempHp = maxHp;
+    tempAtt = maxAtt;
+    tempDef = maxDef;
+    tempSpAtt = maxSpAtt;
+    tempSpDef = maxSpDef;
+    tempSpd = maxSpd;
+
+    //moves
 }
 
 Pokemon::Pokemon(int ID, int startLevel){
@@ -141,16 +166,12 @@ Pokemon::Pokemon(int ID, int startLevel){
     level = startLevel;
     xp = 0;
     type[0] = imports[ID][8];
-    if(imports[9] != ""){
-        type[1] = imports[ID][9];
-    } else {
-        type[1] = "";
-    }
+    type[1] = imports[ID][9];
 
     hpAffinity = affinities[ID][0];
     attAffinity = affinities[ID][1];
     defAffinity = affinities[ID][2];
-    spAttAfinity = affinities[ID][3];
+    spAttAffinity = affinities[ID][3];
     spDefAffinity = affinities[ID][4];
     spdAffinity = affinities[ID][5];
     hpIv = 0;
@@ -159,4 +180,201 @@ Pokemon::Pokemon(int ID, int startLevel){
     spAttIv = 0;
     spDefIv = 0;
     spdIv = 0;
+
+    maxHp = 10 + hpAffinity;
+    maxAtt = 4 + attAffinity;
+    maxDef = 3 + defAffinity;
+    maxSpAtt = 4 + spAttAffinity;
+    maxSpDef = 3 + spDefAffinity;
+    maxSpd = 4 + spdAffinity;
+    for(double ii = 1.0; ii <= level; ii++){
+        maxHp += (pow(1.05,ii/10)*(3.5/4)*hpAffinity*(.9+(.2*hpIv/36)));
+        maxAtt += (pow(1.05,ii/10)*(3.5/4)*attAffinity*(.9+(.2*attIv/36)));
+        maxDef += (pow(1.05,ii/10)*(3.5/4)*defAffinity*(.9+(.2*defIv/36)));
+        maxSpAtt += (pow(1.05,ii/10)*(3.5/4)*spAttAffinity*(.9+(.2*spAttIv/36)));
+        maxSpDef += (pow(1.05,ii/10)*(3.5/4)*spDefAffinity*(.9+(.2*spDefIv/36)));
+        maxSpd += (pow(1.05,ii/10)*(3.5/4)*spdAffinity*(.9+(.2*spdIv/36)));
+    }
+    tempHp = maxHp;
+    tempAtt = maxAtt;
+    tempDef = maxDef;
+    tempSpAtt = maxSpAtt;
+    tempSpDef = maxSpDef;
+    tempSpd = maxSpd;
+
+    //moves
+}
+
+string Pokemon::getName(){
+    return name;
+}
+
+int Pokemon::getId(){
+    return id;
+}
+
+string Pokemon::getNickname(){
+    return nickname;
+}
+
+int Pokemon::getLevel(){
+    return level;
+}
+
+int Pokemon::getXp(){
+    return xp;
+}
+
+double Pokemon::getMaxHP(){
+    return maxHp;
+}
+
+double Pokemon::getmaxAtt(){
+    return maxAtt;
+}
+
+double Pokemon::getMaxDef(){
+    return maxDef;
+}
+
+double Pokemon::getMaxSpAtt(){
+    return maxSpAtt;
+}
+
+double Pokemon::getMaxSpDef(){
+    return maxSpDef;
+}
+
+double Pokemon::getMaxSpd(){
+    return maxSpd;
+}
+
+double Pokemon::getTempHp(){
+    return tempHp;
+}
+
+double Pokemon::getTempAtt(){
+    return tempAtt;
+}
+
+double Pokemon::getTempDef(){
+    return tempDef;
+}
+
+double Pokemon::getTempSpAtt(){
+    return tempSpAtt;
+}
+
+double Pokemon::getTempSpDef(){
+    return tempSpDef;
+}
+
+double Pokemon::getTempSpd(){
+    return tempSpd;
+}
+
+int Pokemon::getHpIv(){
+    return hpIv;
+}
+
+int Pokemon::getAttIv(){
+    return attIv;
+}
+
+int Pokemon::getDefIv(){
+    return defIv;
+}
+
+int Pokemon::getSpAttIv(){
+    return spAttIv;
+}
+
+int Pokemon::getSpDefIv(){
+    return spDefIv;
+}
+
+int Pokemon::getSpdIv(){
+    return spdIv;
+}
+
+double Pokemon::getHpAffinity(){
+    return hpAffinity;
+}
+
+double Pokemon::getAttAffinity(){
+    return attAffinity;
+}
+
+double Pokemon::getDefAffinity(){
+    return defAffinity;
+}
+
+double Pokemon::getSpAttAfinity(){
+    return spAttAffinity;
+}
+
+double Pokemon::getSpDefAffinity(){
+    return spDefAffinity;
+}
+
+double Pokemon::getSpdAffinity(){
+    return spdAffinity;
+}
+
+string Pokemon::setNickname(string newName){
+    nickname = newName;
+}
+
+void Pokemon::setLevel(int newLevel){
+    level = newLevel;
+}
+
+void Pokemon::setXp(int newXp){
+    xp = newXp;
+}
+
+void Pokemon::modHp(double newHp){
+    tempHp += newHp;
+}
+
+void Pokemon::modAtt(double newAtt){
+    tempAtt += newAtt;
+}
+
+void Pokemon::modDef(double newDef){
+    tempDef += newDef;
+}
+
+void Pokemon::modSpAtt(double newSpAtt){
+    tempSpAtt += newSpAtt;
+}
+
+void Pokemon::modSpDef(double newSpDef){
+    tempSpDef += newSpDef;
+}
+
+void Pokemon::modSpd(double newSpd){
+    tempSpd += newSpd;
+}
+
+void Pokemon::levelUp(){
+    level++;
+    maxHp += (pow(1.05,level/10)*(3.5/4)*hpAffinity*(.9+(.2*hpIv/36)));
+    maxAtt += (pow(1.05,level/10)*(3.5/4)*attAffinity*(.9+(.2*attIv/36)));
+    maxDef += (pow(1.05,level/10)*(3.5/4)*defAffinity*(.9+(.2*defIv/36)));
+    maxSpAtt += (pow(1.05,level/10)*(3.5/4)*spAttAffinity*(.9+(.2*spAttIv/36)));
+    maxSpDef += (pow(1.05,level/10)*(3.5/4)*spDefAffinity*(.9+(.2*spDefIv/36)));
+    maxSpd += (pow(1.05,level/10)*(3.5/4)*spdAffinity*(.9+(.2*spdIv/36)));
+    tempHp += (pow(1.05,level/10)*(3.5/4)*hpAffinity*(.9+(.2*hpIv/36)));
+    tempAtt += (pow(1.05,level/10)*(3.5/4)*attAffinity*(.9+(.2*attIv/36)));
+    tempDef += (pow(1.05,level/10)*(3.5/4)*defAffinity*(.9+(.2*defIv/36)));
+    tempSpAtt += (pow(1.05,level/10)*(3.5/4)*spAttAffinity*(.9+(.2*spAttIv/36)));
+    tempSpDef += (pow(1.05,level/10)*(3.5/4)*spDefAffinity*(.9+(.2*spDefIv/36)));
+    tempSpd += (pow(1.05,level/10)*(3.5/4)*spdAffinity*(.9+(.2*spdIv/36)));
+
+    //moves
+}
+
+void Pokemon::addXp(int n){
+    xp += n;
 }
