@@ -4,6 +4,8 @@
 
 #ifndef POKEMON_H
 #define POKEMON_H
+#include <string>
+#include <fstream>
 using namespace std;
 
 class Pokemon{
@@ -13,6 +15,7 @@ class Pokemon{
         int id;
         int level;
         int xp;
+        string type[2] = {};
 
         int hpIv;
         int attIv;
@@ -32,10 +35,13 @@ class Pokemon{
         double tempSpAtt;
         double tempSpDef;
         double tempSpd;
+
+        string imports[151];
     public:
         int type[2];
         Move moves[4];
 
+        int split(string, char, string pieces[], int);
         Pokemon();
         Pokemon(int, int);
         string getName();
