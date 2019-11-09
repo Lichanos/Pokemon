@@ -49,7 +49,7 @@ class Pokemon{
         void setNickname(string);
         void setLevel(int);
         void setXp(int);
-        void setStat(int, double);
+        void modStat(int, double);
 
         void levelUp();
         void addXp(int n);

@@ -14,18 +14,15 @@ int main(){
     
     cout << pika.getName() << endl;
     cout << pika.getLevel() << endl;
-    cout << pika.getAttAffinity() << endl;
+    cout << pika.getAffinity(0) << endl;
     cout << pika.getId() << endl;
     cout << pika.getLevel() << endl;
     cout << endl;
     cout << two.getName() << endl;
-    cout << two.getHpAffinity() << endl;
-    cout << two.getAttAffinity() << endl;
-    cout << two.getDefAffinity() << endl;
-    cout << two.getSpAttAffinity() << endl;
-    cout << two.getSpDefAffinity() << endl;
-    cout << two.getSpdAffinity() << endl;
-    cout << two.getHpIv() << endl;
+    for(int ii = 0; ii < 6; ii++){
+        cout << two.getAffinity(ii) << endl;
+    }
+    cout << two.getIv(5) << endl;
 
     return 0;
 }
