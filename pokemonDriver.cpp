@@ -8,6 +8,9 @@ using namespace std;
 int main(){
     Pokemon pika = Pokemon();
     Pokemon two = Pokemon(2, 9);
+    
+    cout << pika.getName() << endl;
+    cout << pika.getLevel() << endl;
     cout << pika.getAttAffinity() << endl;
     cout << pika.getId() << endl;
     cout << pika.getLevel() << endl;

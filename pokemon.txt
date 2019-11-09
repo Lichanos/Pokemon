@@ -147,5 +147,5 @@ Moltres,90,100,90,90,135,100,Fire,Flying
 Dratini,41,64,45,50,50,50,Dragon,
 Dragonair,61,84,65,70,70,70,Dragon,
 Dragonite,91,134,95,90,100,95,Dragon,Flying
-Mewtwo,106,110,90,135,154,Psychic,
+Mewtwo,106,110,90,135,154,100,Psychic,
 Mew,110,100,110,100,100,110,Psychic,

@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <math.h>
+#include <iostream>
 using namespace std;
 
 string name;
@@ -39,6 +40,9 @@ double tempDef;
 double tempSpDef;
 double tempSpAtt;
 double tempSpd;
+
+string imports[152][9] = {""};
+double affinities[152][6] = {0};
 
 /**
  * Function (copied from hmwk4):
@@ -85,29 +89,32 @@ int split(string initial, char delimiter, string pieces[], int length){
     }
 }
 
-string imports[152][9] = {};
-double affinities[152][6] = {0};
-int initialize(){
+int initialize(string imports[152][9], double affinities[152][6]){
     //imports[0][] = {"name","hp","att","def","spAtt","spDef","spd","type1","type2"};
     ifstream reader;
     reader.open("pokemon.txt");
     if(reader.is_open()){
         string line = "";
         for(int ii = 1; ii < 152; ii++){
+            getline(reader, line);
             string pieces[9] = {};
             if(line != ""){
                 split(line,',',pieces,9);
                 for(int jj = 0; jj < 9; jj++){
+                    //cout << pieces[jj] << endl;
                     imports[ii][jj] = pieces[jj];
                 }
             }
         }
     }
     reader.close();
-    for(int ii = 1; ii < 151; ii++){
+    for(int ii = 1; ii < 152; ii++){
+        //cout << ii << ": ";
         for(int jj = 0; jj < 6; jj++){
             affinities[ii][jj] = stod(imports[ii][jj + 1]);
+            //cout << affinities[ii][jj] << ", ";
         }
+        //cout << endl;
     }
 
     if(affinities[1][0] != 0 && imports[1][0] != ""){
@@ -117,7 +124,7 @@ int initialize(){
 }
 
 Pokemon::Pokemon(){
-    initialize();
+    initialize(imports, affinities);
     name = "Pikachu";
     id = 25;
     nickname = "Pikachu";
@@ -164,7 +171,7 @@ Pokemon::Pokemon(){
 }
 
 Pokemon::Pokemon(int ID, int startLevel){
-    initialize();
+    initialize(imports, affinities);
     name = imports[ID][0];
     id = ID;
     nickname = imports[ID][0];
