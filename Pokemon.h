@@ -30,7 +30,7 @@ class Pokemon{
         double affinities[152][6];
     public:
         string type[2] = {};
-        //Move moves[4];
+        Move moves[4] = {};
 
         int getIv();
         //int split(string, char, string pieces[], int);
@@ -50,6 +50,10 @@ class Pokemon{
         void setLevel(int);
         void setXp(int);
         void modStat(int, double);
+
+        Move getMove(int);
+        void addMove(int, Move);
+        int replaceMove(string, Move);
 
         void levelUp();
         void addXp(int n);

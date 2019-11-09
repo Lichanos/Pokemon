@@ -21,6 +21,7 @@ string nickname;
 int level;
 int xp;
 string type[2] = {};
+Move moves[4] = {};
 
 double maxStat[6];
 double tempStat[6];
@@ -150,7 +151,9 @@ Pokemon::Pokemon(){
         tempStat[ii] = maxStat[ii];
     }
 
-    //moves
+    moves[0] = Move("Tackle","Normal",0,40.0,30);
+    moves[1] = Move(imports[id][8] + "Whack","Normal",0,50.0,20);
+    moves[2] = Move("Tail whip","Normal",2,20,25);
 }
 
 Pokemon::Pokemon(int ID, int startLevel){
@@ -183,7 +186,9 @@ Pokemon::Pokemon(int ID, int startLevel){
         tempStat[ii] = maxStat[ii];
     }
 
-    //moves
+    moves[0] = Move("Tackle","Normal",0,40.0,30);
+    moves[1] = Move(imports[id][8] + "Whack","Normal",0,50.0,20);
+    moves[2] = Move("Tail whip","Normal",2,20,25);
 }
 
 string Pokemon::getName(){
@@ -236,6 +241,24 @@ void Pokemon::setXp(int newXp){
 
 void Pokemon::modStat(int i, double newStat){
     tempStat[i] = newStat;
+}
+
+Move Pokemon::getMove(int i){
+    return moves[i];
+}
+
+void Pokemon::addMove(int i, Move m){
+    moves[i] = m;
+}
+
+int Pokemon::replaceMove(string name, Move m){
+    for(int ii = 0; ii < 4; ii++){
+        if(moves[ii].getName() == name){
+            moves[ii] = m;
+            return 1;
+        }
+    }
+    return 0;
 }
 
 void Pokemon::levelUp(){
