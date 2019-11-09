@@ -7,6 +7,12 @@
 #include <fstream>
 #include <math.h>
 #include <iostream>
+#include <random>
+#include <time.h>
+#include <chrono>
+#include <stdio.h> 
+#include <stdlib.h> 
+
 using namespace std;
 
 string name;
@@ -43,6 +49,17 @@ double tempSpd;
 
 string imports[152][9] = {""};
 double affinities[152][6] = {0};
+
+int Pokemon::getIv(){
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    int number = -1;
+    normal_distribution<double> distribution (18,9);
+    while(number > 36.99 || number < 0){
+        number = (int)distribution(generator);
+    }
+    return (int)number;
+}
 
 /**
  * Function (copied from hmwk4):
@@ -139,12 +156,12 @@ Pokemon::Pokemon(){
     spAttAffinity = affinities[25][3];
     spDefAffinity = affinities[25][4];
     spdAffinity = affinities[25][5];
-    hpIv = 0;
-    attIv = 0;
-    defIv = 0;
-    spAttIv = 0;
-    spDefIv = 0;
-    spdIv = 0;
+    hpIv = getIv();
+    attIv = getIv();
+    defIv = getIv();
+    spAttIv = getIv();
+    spDefIv = getIv();
+    spdIv = getIv();
 
     maxHp = 10 + hpAffinity;
     maxAtt = 4 + attAffinity;
@@ -186,12 +203,12 @@ Pokemon::Pokemon(int ID, int startLevel){
     spAttAffinity = affinities[ID][3];
     spDefAffinity = affinities[ID][4];
     spdAffinity = affinities[ID][5];
-    hpIv = 0;
-    attIv = 0;
-    defIv = 0;
-    spAttIv = 0;
-    spDefIv = 0;
-    spdIv = 0;
+    hpIv = getIv();
+    attIv = getIv();
+    defIv = getIv();
+    spAttIv = getIv();
+    spDefIv = getIv();
+    spdIv = getIv();
 
     maxHp = 10 + hpAffinity;
     maxAtt = 4 + attAffinity;
@@ -321,7 +338,7 @@ double Pokemon::getDefAffinity(){
     return defAffinity;
 }
 
-double Pokemon::getSpAttAfinity(){
+double Pokemon::getSpAttAffinity(){
     return spAttAffinity;
 }
 

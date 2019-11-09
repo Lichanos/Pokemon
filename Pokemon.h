@@ -6,6 +6,9 @@
 #include <fstream>
 #include <math.h>
 #include "Move.h"
+#include <time.h>
+#include <stdio.h> 
+#include <stdlib.h> 
 using namespace std;
 
 #ifndef POKEMON_H
@@ -49,7 +52,8 @@ class Pokemon{
         string type[2] = {};
         //Move moves[4];
 
-        int split(string, char, string pieces[], int);
+        int getIv();
+        //int split(string, char, string pieces[], int);
         Pokemon();
         Pokemon(int, int);
         string getName();
@@ -79,7 +83,7 @@ class Pokemon{
         double getHpAffinity();
         double getAttAffinity();
         double getDefAffinity();
-        double getSpAttAfinity();
+        double getSpAttAffinity();
         double getSpDefAffinity();
         double getSpdAffinity();
 
