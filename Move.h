@@ -5,25 +5,30 @@
 #ifndef MOVE_H
 #define MOVE_H
 using namespace std;
+#include <string>
+#include <fstream>
 
 class Move{
     private:
         string name;
-        int type;
+        string type;
         int stat;
         double damage;
-        const int maxPP;
+        int maxPP;
         int PP;
     public:
+        Move();
+        Move(string, string, int, double, int);
+
         string getName();
-        int getType();
+        string getType();
         int getStat();
         double getDamage();
         int getMaxPP();
         int getPP();
 
         void setName(string);
-        void setType(int);
+        void setType(string);
         void setStat(int);
         void setDamage(double);
         void setMaxPP(int);
