@@ -6,6 +6,10 @@
 #define TRAINER_H
 using namespace std;
 #include <vector>
+#include <string>
+#include "Pokemon.h"
+#include "Move.h"
+#include "Item.h"
 
 class Trainer{
     private:
@@ -18,9 +22,16 @@ class Trainer{
         int xPos;
         int yPos;
     public:
+        Trainer();
+        Trainer(string, int, int);
+
         string getName();
         vector<Pokemon> getPokemon();
+        Pokemon getPokemonAt(int i);
         vector<Item> getItems();
+        Item getItemAt(int i);
+        vector<string> getBadges();
+        int getNumBadges();
         int getSteps();
         double getPower();
         int getXPos();
@@ -28,12 +39,11 @@ class Trainer{
 
         void setName(string);
         void addPokemon(Pokemon);
-        int releasePokemon(string);
         int addItem(Item);
         int addBadge(string);
         void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
-}
+};
 #endif
