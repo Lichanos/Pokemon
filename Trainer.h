@@ -38,9 +38,9 @@ class Trainer{
         int getYPos();
 
         void setName(string);
-        void addPokemon(Pokemon);
-        int addItem(Item);
-        int addBadge(string);
+        int addPokemon(Pokemon);
+        void addItem(Item);
+        void addBadge(string);
         void moveUp();
         void moveDown();
         void moveLeft();

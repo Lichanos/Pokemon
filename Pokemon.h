@@ -26,9 +26,9 @@ class Pokemon{
         double statAff[6];
         int iv[6];
 
+    public:
         string imports[152][9];
         double affinities[152][6];
-    public:
         string type[2] = {};
         Move moves[4] = {};
 

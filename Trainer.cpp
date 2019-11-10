@@ -87,15 +87,26 @@ void Trainer::setName(string name){
     playerName = name;
 }
 
-void Trainer::addPokemon(Pokemon p){
+int Trainer::addPokemon(Pokemon p){
     pokemon.push_back(p);
+    for(Pokemon p1 : pokemon){
+        if(p1.getName() == p.getName()){
+            for(int ii = 0; ii < 6; ii++){
+                if(p1.getIv(ii) != p.getIv(ii)){
+                    return 0;
+                }
+            }
+            return 1;
+        }
+    }
+    return 0;
 }
 
-int Trainer::addItem(Item item){
+void Trainer::addItem(Item item){
     items.push_back(item);
 }
 
-int Trainer::addBadge(string badgeName){
+void Trainer::addBadge(string badgeName){
     badges.push_back(badgeName);
 }
 
