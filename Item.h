@@ -4,27 +4,28 @@
 
 #ifndef ITEM_H
 #define ITEM_H
+#include <string>
 using namespace std;
 
 class Item{
     private:
-        string name;
-        int id;
+        string itemName;
+        int itemId;
         int number;
         int cost;
     public:
         Item();
         Item(string, int id);
         Item(string, int id, int number);
-        string getName();
-        int getId();
+        string getItemName();
+        int getItemId();
         int getNumber();
         int getCost();
 
-        void setName();
-        void setId();
+        void setItemName(string);
+        void setItemId(int);
         void addNumber(int);
         void decrement();
-        void setCost();
-}
+        void setCost(int);
+};
 #endif

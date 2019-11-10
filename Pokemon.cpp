@@ -253,7 +253,7 @@ void Pokemon::addMove(int i, Move m){
 
 int Pokemon::replaceMove(string name, Move m){
     for(int ii = 0; ii < 4; ii++){
-        if(moves[ii].getName() == name){
+        if(moves[ii].getMoveName() == name){
             moves[ii] = m;
             return 1;
         }

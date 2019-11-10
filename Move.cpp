@@ -8,16 +8,16 @@ using namespace std;
 #include <fstream>
 #include "Move.h"
 
-string name;
-string type;
+string moveName;
+string moveType;
 int stat;
 double damage;
 int maxPP;
 int PP;
 
 Move::Move(){
-    name = "";
-    type = "Normal";
+    moveName = "";
+    moveType = "Normal";
     stat = 0;
     damage = 0;
     maxPP = 0;
@@ -25,20 +25,20 @@ Move::Move(){
 }
 
 Move::Move(string newName, string newType, int newStat, double newDamage, int newMaxPP){
-    name = newName;
-    type = newType;
+    moveName = newName;
+    moveType = newType;
     stat = newStat;
     damage = newDamage;
     maxPP = newMaxPP;
     PP = maxPP;
 }
 
-string Move::getName(){
-    return name;
+string Move::getMoveName(){
+    return moveName;
 }
 
-string Move::getType(){
-    return type;
+string Move::getMoveType(){
+    return moveType;
 }
 
 int Move::getStat(){
@@ -57,12 +57,12 @@ int Move::getPP(){
     return PP;
 }
 
-void Move::setName(string newName){
-    name = newName;
+void Move::setMoveName(string newName){
+    moveName = newName;
 }
 
-void Move::setType(string newType){
-    type = newType;
+void Move::setMoveType(string newType){
+    moveType = newType;
 }
 
 void Move::setStat(int newStat){

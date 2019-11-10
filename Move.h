@@ -10,8 +10,8 @@ using namespace std;
 
 class Move{
     private:
-        string name;
-        string type;
+        string moveName;
+        string moveType;
         int stat;
         double damage;
         int maxPP;
@@ -20,15 +20,15 @@ class Move{
         Move();
         Move(string, string, int, double, int);
 
-        string getName();
-        string getType();
+        string getMoveName();
+        string getMoveType();
         int getStat();
         double getDamage();
         int getMaxPP();
         int getPP();
 
-        void setName(string);
-        void setType(string);
+        void setMoveName(string);
+        void setMoveType(string);
         void setStat(int);
         void setDamage(double);
         void setMaxPP(int);

@@ -15,7 +15,7 @@ void welcome(){
     int choice;
     int pokemonNum;
     bool valid = false;
-    cout << "Welcome to Pokémon!" << endl;
+    cout << "Welcome to Pokemon!" << endl;
     cout << "Please state your name: ";
     cin >> username;
     cout << "Welcome, " << username << "!" << endl;
@@ -52,7 +52,7 @@ void welcome(){
     Pokemon p = Pokemon(pokemonNum, 5);
     int firstSuccess = player.addPokemon(p);
     if(firstSuccess == 1){
-        cout << p.imports[0] << " was successfully added to your pokedex." << endl; 
+        cout << p.imports[pokemonNum][0] << " was successfully added to your pokedex." << endl; 
     }
     else{
         cout << "There was an error." << endl;
@@ -62,6 +62,7 @@ void welcome(){
 }
 
 int main(){
+    welcome();
 
     return 0;
 }
