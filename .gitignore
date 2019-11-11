@@ -2,3 +2,5 @@
 *.o
 *.gch
 *.exe
+*pokemonDriver.cpp
+*mapDriver.cpp
