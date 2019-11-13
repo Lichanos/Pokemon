@@ -25,14 +25,15 @@ Map::Map(){
     generateMap(maxX, maxY, seed);
 }
 
-Map::Map(int maxx, int maxy, int newSeed){
+Map::Map(int size, int newSeed){
     seed = newSeed;
-    maxX = maxx;
-    maxY = maxy;
+    maxX = 90;
+    maxY = 30*size;
+    generateMap(maxX, maxY, seed);
 }
 
 void Map::generateMap(int maxX, int maxY, int seed){
-    
+
     char baseMap[maxY][maxX];
     char chunks[maxY/15][maxX/30][15][30];
     ifstream reader;
@@ -99,6 +100,7 @@ int Map::getMaxY(){
 }
 
 void Map::printMap(){
+    cout << endl;
     for(int ii = 0; ii < maxY; ii++){
         for(int jj = 0; jj < maxX; jj++){
             cout << tiles[ii][jj].getTerrain();

@@ -21,7 +21,7 @@ class Map{
         vector<Pokemon> mapPokemon;
 
         Map();
-        Map(int, int, int);
+        Map(int, int);
         void generateMap(int, int, int);
         int getMaxX();
         int getMaxY();

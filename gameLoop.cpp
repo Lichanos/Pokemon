@@ -12,7 +12,7 @@
 #include "Tile.h"
 using namespace std;
 
-void welcome(){
+Trainer welcome(){
     string username;
     int choice;
     int pokemonNum;
@@ -61,10 +61,19 @@ void welcome(){
         player.addPokemon(Pokemon(25,5));
         cout << "Pikachu was successfully added to your pokedex.";
     }
+
+    return player;
 }
 
 int main(){
-    welcome();
+    Trainer player = welcome();
     
+    cout << "Half-sized map or full-sized map? (Enter \"1\" or \"2\"): ";
+    int size; cin >> size; 
+    cout << "What should the map's seed be? (0 for defualt)" << endl;
+    int seed; cin >> seed;
+    Map map = Map(size, seed);
+    map.printMap();
+
     return 0;
 }
