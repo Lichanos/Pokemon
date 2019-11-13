@@ -5,6 +5,8 @@
 #include "Tile.h"
 #include "Pokemon.h"
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h> 
 using namespace std;
 
 #ifndef MAP_H
@@ -13,11 +15,16 @@ class Map{
     private:
         int maxX;
         int maxY;
+        int seed;
     public:
-        vector<Tile> tiles;
-        vector<Pokemon> pokemon;
-        Map(int, int);
+        Tile tiles[100][100];
+        vector<Pokemon> mapPokemon;
+
+        Map();
+        Map(int, int, int);
+        void generateMap(int, int, int);
         int getMaxX();
         int getMaxY();
+        void printMap();
 };
 #endif

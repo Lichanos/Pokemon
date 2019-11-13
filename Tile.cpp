@@ -8,27 +8,33 @@
 using namespace std;
 #include <iostream>
 
-int xPos;
-int yPos;
+int xCoord;
+int yCoord;
 char terrain;
 bool completed;
-bool isPokemon;
-bool isItem;
-Pokemon p;
-Item i;
+bool isItPokemon;
+bool isItItem;
 
-Tile::Tile(int newX, int newY, char terrainType){
-    xPos = newX;
-    yPos = newY;
-    terrain = terrainType;
+Tile::Tile(){
+    xCoord = 0;
+    yCoord = 0;
+    terrain = 'C';
+    completed = false;
 }
 
-int Tile::getXPos(){
-    return xPos;
+Tile::Tile(int newX, int newY, char newTerrain){
+    xCoord = newX;
+    yCoord = newY;
+    terrain = newTerrain;
+    completed = false;
 }
 
-int Tile::getYPos(){
-    return yPos;
+int Tile::getXCoord(){
+    return xCoord;
+}
+
+int Tile::getYCoord(){
+    return yCoord;
 }
 
 char Tile::getTerrain(){
@@ -40,27 +46,19 @@ bool Tile::getCompleted(){
 }
 
 bool Tile::isPokemon(){
-    return isPokemon;
+    return isItPokemon;
 }
 
 bool Tile::isItem(){
-    return isItem;
+    return isItItem;
 }
 
-Pokemon Tile::getPokemon(){
-    return p;
+void Tile::setXCoord(int newX){
+    xCoord = newX;
 }
 
-Item Tile::getItem(){
-    return i;
-}
-
-void Tile::setXPos(int newX){
-    xPos = newX;
-}
-
-void Tile::setYPos(int newY){
-    yPos = newY;
+void Tile::setYCoord(int newY){
+    yCoord = newY;
 }
 
 void Tile::setTerrain(char terrainType){
@@ -72,17 +70,9 @@ void Tile::setCompleted(){
 }
 
 void setIsPokemon(bool pokemonUpdate){
-    isPokemon = pokemonUpdate;
+    isItPokemon = pokemonUpdate;
 }
 
 void setIsItem(bool itemUpdate){
-    isItem = itemUpdate;
-}
-
-void setPokemon(Pokemon newPokemon){
-    p = newPokemon;
-}
-
-void setItem(Item newItem){
-    i = newItem;
+    isItItem = itemUpdate;
 }

@@ -8,6 +8,8 @@
 #include "Move.h"
 #include "Pokemon.h"
 #include "Item.h"
+#include "Map.h"
+#include "Tile.h"
 using namespace std;
 
 void welcome(){
@@ -63,6 +65,6 @@ void welcome(){
 
 int main(){
     welcome();
-
+    
     return 0;
 }

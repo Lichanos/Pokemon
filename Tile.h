@@ -9,32 +9,27 @@ using namespace std;
 #define TILE_H
 class Tile{
     private:
-        int xPos;
-        int yPos;
+        int xCoord;
+        int yCoord;
         char terrain;
         bool completed;
-        bool isPokemon;
-        bool isItem;
-        Pokemon p;
-        Item i;
+        bool isItPokemon;
+        bool isItItem;
     public:
+        Tile();
         Tile(int, int, char);
-        int getXPos();
-        int getYPos();
+        int getXCoord();
+        int getYCoord();
         char getTerrain();
         bool getCompleted();
         bool isPokemon();
         bool isItem();
-        Pokemon getPokemon();
-        Item getItem();
 
-        void setXPos(int);
-        void setYPos(int);
+        void setXCoord(int);
+        void setYCoord(int);
         void setTerrain(char);
         void setCompleted();
         void setIsPokemon(bool);
         void setIsItem(bool);
-        void setPokemon(Pokemon);
-        void setItem(Item);
 };
 #endif
