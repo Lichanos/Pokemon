@@ -106,6 +106,7 @@ int initialize(string imports[152][9], double affinities[152][6]){
         }
     }
     reader.close();
+    imports[1][0] = "Bulbasaur";
     for(int ii = 1; ii < 152; ii++){
         //cout << ii << ": ";
         for(int jj = 0; jj < 6; jj++){
