@@ -2,6 +2,10 @@
 //CS1300 UCB 
 //Final Project - Pokemon Game
 
+/************************************************************************************************************
+ * Important: In case you skipped the README, all class comments are in my *header* files not my .cpp files *
+ ************************************************************************************************************/
+
 #include <iostream>
 #include <string>
 #include "Trainer.h"
@@ -77,3 +81,27 @@ int main(){
 
     return 0;
 }
+
+/**
+ * Stuff I'm going to add
+ * Put the player on a map
+ * Put pokemon and trainers on a map, scattered randomly. Have a temporary terrain tile representing trainers and the player
+ * Have the map only show 6 tiles in all directions of the player instead of the entire thing
+ * Allow the player to move around
+ *      Chance to encounter wild pokemon when in tall grass
+ * 
+ * Write a battle method for wild pokemon
+ *      Use weighted random numbers to calculate the likelihood of attacking/fleeing
+ *          Randomly select from viable tall grass tiles where the wild pokemon flees to
+ *      Use weighted randomness to determine which moves to use
+ *      Determine likelihood of capturing the wild pokemon
+ *          Method for this too
+ * Write a similar battle method for trainers
+ *      Weighted randomness for how trainers choose the pokemon they send in
+ * 
+ * Allow player to buy items from shops when at shops
+ * Allow player to heal and reorder *all* pokemon when at pokemon centers
+ * Checks to see if there is certain terrain present to use additional functions
+ * Implement additional battles for gym leaders
+ * Implement additional battles for elite 4 and champion
+ */

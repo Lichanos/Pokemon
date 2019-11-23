@@ -1,0 +1,1 @@
+Comments on all member functions and variables will be in the header files. Non-member functions will have comments above the function itself.

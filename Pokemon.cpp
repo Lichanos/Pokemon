@@ -87,6 +87,11 @@ int split(string initial, char delimiter, string pieces[], int length){
     }
 }
 
+/**
+ * Reads in from a file sets the imports array to be everything in the file
+ * Next reads the affinity values from the middle of the imports array to the affinities array
+ * Returns status of function call
+ */
 int initialize(string imports[152][9], double affinities[152][6]){
     //imports[0][] = {"name","hp","att","def","spAtt","spDef","spd","type1","type2"};
     ifstream reader;
