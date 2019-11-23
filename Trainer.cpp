@@ -110,6 +110,14 @@ void Trainer::addBadge(string badgeName){
     badges.push_back(badgeName);
 }
 
+void Trainer::setXPos(int x){
+    xPos = x;
+}
+
+void Trainer::setYPos(int y){
+    yPos = y;
+}
+
 void Trainer::moveUp(){
     yPos--;
 }
@@ -124,4 +132,21 @@ void Trainer::moveLeft(){
 
 void Trainer::moveRight(){
     xPos--;
+}
+
+double Trainer::calcPowerLevel(){
+    double total;
+    if(pokemon.size() < 6){
+        for(Pokemon p : pokemon){
+            total += p.getLevel();
+        }
+        total/=pokemon.size();
+    }
+    else{
+        for(int ii = 0; ii < 6; ii++){
+            total += pokemon.at(ii).getLevel();
+        }
+        total/=6;
+    }
+    return total;
 }

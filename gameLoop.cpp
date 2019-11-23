@@ -14,6 +14,10 @@
 #include "Item.h"
 #include "Map.h"
 #include "Tile.h"
+#include <vector>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
 using namespace std;
 
 Trainer welcome(){
@@ -69,8 +73,26 @@ Trainer welcome(){
     return player;
 }
 
+Pokemon generate_pokemon(Trainer player){
+    int level;
+    int id;
+    srand(time(0));
+    double power = player.calcPowerLevel();
+    if(power > 40){
+        id = (int)((151*((double)rand())/RAND_MAX) + 1);
+        level = (int)((10*((double)rand())/RAND_MAX) - 7);
+    }
+    else{
+        level = (int)((6*((double)rand())/RAND_MAX) - 4);
+        id = (int)((143*((double)rand())/RAND_MAX) + 1);
+    }
+    return Pokemon(id, level);
+}
+
 int main(){
     Trainer player = welcome();
+    vector<Trainer> trainers;
+    vector<Pokemon> wild_pokemon;
     
     cout << "Half-sized map or full-sized map? (Enter \"1\" or \"2\"): ";
     int size; cin >> size; 
@@ -78,6 +100,26 @@ int main(){
     int seed; cin >> seed;
     Map map = Map(size, seed);
     map.printMap();
+    srand(time(0));
+    bool valid_terrain = false;
+    while(!valid_terrain){
+        int y = (int)(map.getMaxY()*((double)(rand())/RAND_MAX));
+        int x = (int)(map.getMaxX()*((double)(rand())/RAND_MAX));
+        if(map.tiles[y][x].getTerrain() == '.'){
+            player.setXPos(x);
+            player.setYPos(y);
+            valid_terrain = true;
+        }
+    }
+    // cout << endl;
+    // cout << player.getXPos() << endl;
+    // cout << player.getYPos() << endl;
+
+    // for(int ii = 0; ii < size*20; ii++){
+
+    // }
+
+    // generate_pokemon(player);
 
     return 0;
 }

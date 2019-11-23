@@ -68,6 +68,10 @@ class Trainer{
         void addItem(Item);
         //Adds a badge
         void addBadge(string);
+
+        void setXPos(int);
+        void setYPos(int);
+
         //Moves the trainer up
         void moveUp();
         //Moves the trainer down
@@ -79,5 +83,8 @@ class Trainer{
 
         //Swaps two pokemon
         void swapPokemon(int, int);
+
+        //Calculates power level
+        double calcPowerLevel();
 };
 #endif

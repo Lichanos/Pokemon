@@ -44,5 +44,8 @@ class Map{
         int getMaxY();
         //Iterates through all tiles of the map, prints the characters
         void printMap();
+
+        //Prints a small subsection of the map which the user can see
+        void printMap(int, int);
 };
 #endif

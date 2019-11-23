@@ -108,3 +108,12 @@ void Map::printMap(){
         cout << endl;
     }
 }
+
+void Map::printMap(int playerX, int playerY){
+    cout << endl;
+    for(int ii = playerY-8; ii < playerY+9; ii++){
+        for(int jj = playerX-8; jj < playerX+9; jj++){
+            
+        }
+    }
+}
