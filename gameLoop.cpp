@@ -115,11 +115,32 @@ int main(){
     // cout << player.getXPos() << endl;
     // cout << player.getYPos() << endl;
 
-    // for(int ii = 0; ii < size*20; ii++){
+    for(int ii = 0; ii < size*10; ii++){
+        srand(time(0));
+        int numPokemon = (int)(4*((double)rand())/RAND_MAX);
+        int x;
+        int y;
+        bool valid_terrain = false;
+        while(!valid_terrain){
+            y = (int)(map.getMaxY()*((double)(rand())/RAND_MAX));
+            x = (int)(map.getMaxX()*((double)(rand())/RAND_MAX));
+            bool trainer_here = false;
+            for(Trainer t : trainers){
+                if(t.getXPos() == x && t.getYPos() == y){
+                    trainer_here = true;
+                }
+            }
+            if((map.tiles[y][x].getTerrain() == '.' || map.tiles[y][x].getTerrain() == '#') && !trainer_here){
+                valid_terrain = true;
+            }
+        }
+        trainers.push_back(Trainer("PokeFan", x, y));
+        for(int jj = 0; jj < numPokemon; jj++){
+            trainers.at(ii).addPokemon(generate_pokemon(player));
+        }
+    }
 
-    // }
-
-    // generate_pokemon(player);
+    map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
 
     return 0;
 }

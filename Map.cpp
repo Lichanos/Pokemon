@@ -5,6 +5,7 @@
 #include "Tile.h"
 #include "Pokemon.h"
 #include "Map.h"
+#include "Trainer.h"
 #include <vector>
 #include <iostream>
 #include <stdio.h>
@@ -109,11 +110,32 @@ void Map::printMap(){
     }
 }
 
-void Map::printMap(int playerX, int playerY){
+void Map::printMapAroundPlayer(int playerX, int playerY, vector<Trainer> trainers){
     cout << endl;
-    for(int ii = playerY-8; ii < playerY+9; ii++){
-        for(int jj = playerX-8; jj < playerX+9; jj++){
-            
+    bool trainer_here;
+    for(int ii = playerY-7; ii < playerY+8; ii++){
+        if(ii >= 0 && ii < getMaxY()){
+            for(int jj = playerX-8; jj < playerX+9; jj++){
+                if(jj >= 0 && jj < getMaxX()){
+                    trainer_here = false;
+                    for(Trainer t : trainers){
+                        if(t.getXPos() == jj && t.getYPos() == ii){
+                            trainer_here = true;
+                        }
+                    }
+                    if(ii == playerY && jj == playerX){
+                        cout << 'I';
+                    }
+                    else if(trainer_here){
+                        cout << 'T';
+                    }
+                    else{
+                        cout << tiles[ii][jj].getTerrain();
+                    }
+                }
+            }
+            cout << endl;
         }
     }
+    cout << endl;
 }

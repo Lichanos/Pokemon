@@ -7,6 +7,7 @@
 #include <vector>
 #include <stdio.h>
 #include <stdlib.h> 
+#include "Trainer.h"
 using namespace std;
 
 #ifndef MAP_H
@@ -46,6 +47,6 @@ class Map{
         void printMap();
 
         //Prints a small subsection of the map which the user can see
-        void printMap(int, int);
+        void printMapAroundPlayer(int, int, vector<Trainer>);
 };
 #endif
