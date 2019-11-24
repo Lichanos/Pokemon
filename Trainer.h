@@ -10,6 +10,7 @@ using namespace std;
 #include "Pokemon.h"
 #include "Move.h"
 #include "Item.h"
+#include "Tile.h"
 
 class Trainer{
     private:
@@ -73,13 +74,13 @@ class Trainer{
         void setYPos(int);
 
         //Moves the trainer up
-        void moveUp();
+        int moveUp(Tile);
         //Moves the trainer down
-        void moveDown();
+        int moveDown(Tile);
         //Moves the trainer left
-        void moveLeft();
+        int moveLeft(Tile);
         //Moves the trianer right
-        void moveRight();
+        int moveRight(Tile);
 
         //Swaps two pokemon
         void swapPokemon(int, int);

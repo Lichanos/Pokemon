@@ -117,17 +117,8 @@ void Map::printMapAroundPlayer(int playerX, int playerY, vector<Trainer> trainer
         if(ii >= 0 && ii < getMaxY()){
             for(int jj = playerX-8; jj < playerX+9; jj++){
                 if(jj >= 0 && jj < getMaxX()){
-                    trainer_here = false;
-                    for(Trainer t : trainers){
-                        if(t.getXPos() == jj && t.getYPos() == ii){
-                            trainer_here = true;
-                        }
-                    }
                     if(ii == playerY && jj == playerX){
-                        cout << 'I';
-                    }
-                    else if(trainer_here){
-                        cout << 'T';
+                        cout << 'U';
                     }
                     else{
                         cout << tiles[ii][jj].getTerrain();

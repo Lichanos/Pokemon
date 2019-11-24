@@ -9,6 +9,8 @@ using namespace std;
 #include "Move.h"
 #include "Item.h"
 #include "Trainer.h"
+#include <iostream>
+#include "Tile.h"
 
 string playerName;
 vector<Pokemon> pokemon;
@@ -118,20 +120,140 @@ void Trainer::setYPos(int y){
     yPos = y;
 }
 
-void Trainer::moveUp(){
-    yPos--;
+int Trainer::moveUp(Tile t){
+    if(t.getTerrain() == '.'){
+        yPos--;
+        return 1;
+    }
+    else if(t.getTerrain() == '#'){
+        yPos--;
+        srand(time(0));
+        if(6*((double)rand())/RAND_MAX > 5){
+            return 2;
+        }
+        else{
+            return 1;
+        }
+    }
+    else if(t.getTerrain() == 'C'){
+        yPos--;
+        return 3;
+    }
+    else if(t.getTerrain() == 'G'){
+        yPos--;
+        if(t.getCompleted()){
+            return 1;
+        }
+        else{
+            return 4;
+        }
+    }
+    else{
+        return 0;
+    }
+    return 0;
 }
 
-void Trainer::moveDown(){
-    yPos++;
+int Trainer::moveDown(Tile t){
+    if(t.getTerrain() == '.'){
+        yPos++;
+        return 1;
+    }
+    else if(t.getTerrain() == '#'){
+        yPos++;
+        srand(time(0));
+        if(6*((double)rand())/RAND_MAX > 5){
+            return 2;
+        }
+        else{
+            return 1;
+        }
+    }
+    else if(t.getTerrain() == 'C'){
+        yPos++;
+        return 3;
+    }
+    else if(t.getTerrain() == 'G'){
+        yPos++;
+        if(t.getCompleted()){
+            return 1;
+        }
+        else{
+            return 4;
+        }
+    }
+    else{
+        return 0;
+    }
+    return 0;
 }
 
-void Trainer::moveLeft(){
-    xPos++;
+int Trainer::moveLeft(Tile t){
+    if(t.getTerrain() == '.'){
+        xPos--;
+        return 1;
+    }
+    else if(t.getTerrain() == '#'){
+        xPos--;
+        srand(time(0));
+        if(6*((double)rand())/RAND_MAX > 5){
+            return 2;
+        }
+        else{
+            return 1;
+        }
+    }
+    else if(t.getTerrain() == 'C'){
+        xPos--;
+        return 3;
+    }
+    else if(t.getTerrain() == 'G'){
+        xPos--;
+        if(t.getCompleted()){
+            return 1;
+        }
+        else{
+            return 4;
+        }
+    }
+    else{
+        return 0;
+    }
+    return 0;
 }
 
-void Trainer::moveRight(){
-    xPos--;
+int Trainer::moveRight(Tile t){
+    if(t.getTerrain() == '.'){
+        xPos++;
+        return 1;
+    }
+    else if(t.getTerrain() == '#'){
+        xPos++;
+        srand(time(0));
+        if(6*((double)rand())/RAND_MAX > 5){
+            return 2;
+        }
+        else{
+            return 1;
+        }
+    }
+    else if(t.getTerrain() == 'C'){
+        xPos++;
+        return 3;
+    }
+    else if(t.getTerrain() == 'G'){
+        xPos++;
+        if(t.getCompleted()){
+            return 1;
+        }
+        else{
+            return 4;
+        }
+    }
+    else{
+        return 0;
+    }
+    return 0;
 }
 
 double Trainer::calcPowerLevel(){

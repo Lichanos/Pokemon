@@ -89,10 +89,65 @@ Pokemon generate_pokemon(Trainer player){
     return Pokemon(id, level);
 }
 
+void play(Trainer player, vector<Trainer> trainers, Map map){
+    bool br = false;
+    while(!br){
+        //Keystroke madness
+        string s = "";
+        cin >> s;
+        int result;
+        if(s == "w"){
+            if(player.getYPos() > 0){
+                result = player.moveUp(map.tiles[player.getYPos()-1][player.getXPos()]);
+            }
+            else {
+                cout << "You cannot move any further in this direction." << endl;
+            }
+        }
+        else if(s == "a"){
+            if(player.getXPos() > 0){
+                result = player.moveLeft(map.tiles[player.getYPos()][player.getXPos()-1]);
+            }
+            else {
+                cout << "You cannot move any further in this direction." << endl;
+            }
+        }
+        else if(s == "s"){
+            if(player.getYPos() < (map.getMaxY()-1)){
+                result = player.moveDown(map.tiles[player.getYPos()+1][player.getXPos()]);
+            }
+            else {
+                cout << "You cannot move any further in this direction." << endl;
+            }
+        }
+        else if(s == "d"){
+            if(player.getXPos() < (map.getMaxX() -1)){
+                result = player.moveRight(map.tiles[player.getYPos()][player.getXPos()+1]);
+            }
+            else {
+                cout << "You cannot move any further in this direction." << endl;
+            }
+        }
+
+        if(result == 1){
+            map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
+        }
+        else if(result == 2){
+            Pokemon p = generate_pokemon(player);
+            //encounter
+        }
+        else if(result == 3){
+            //pokemon center things
+        }
+        else if(result == 4){
+            //gym things
+        }
+    }
+}
+
 int main(){
     Trainer player = welcome();
     vector<Trainer> trainers;
-    vector<Pokemon> wild_pokemon;
     
     cout << "Half-sized map or full-sized map? (Enter \"1\" or \"2\"): ";
     int size; cin >> size; 
@@ -135,6 +190,7 @@ int main(){
             }
         }
         trainers.push_back(Trainer("PokeFan", x, y));
+        map.tiles[trainers.at(ii).getYPos()][trainers.at(ii).getXPos()].setTerrain('!');
         for(int jj = 0; jj < numPokemon; jj++){
             trainers.at(ii).addPokemon(generate_pokemon(player));
         }
