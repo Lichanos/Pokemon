@@ -32,7 +32,7 @@ string imports[152][9] = {""};
 double affinities[152][6] = {0};
 
 int Pokemon::getIv(){
-    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count() + rand();
     default_random_engine generator (seed);
     int number = -1;
     normal_distribution<double> distribution (18,9);
@@ -137,6 +137,7 @@ Pokemon::Pokemon(){
     type[0] = imports[id][8];
     type[1] = imports[id][9];
 
+    srand(time(0));
     for(int ii = 0; ii < 6; ii++){
         statAff[ii] = affinities[25][ii];
         iv[ii] = getIv();
@@ -172,6 +173,7 @@ Pokemon::Pokemon(int ID, int startLevel){
     type[0] = imports[ID][8];
     type[1] = imports[ID][9];
 
+    srand(time(0));
     for(int ii = 0; ii < 6; ii++){
         statAff[ii] = affinities[ID][ii];
         iv[ii] = getIv();

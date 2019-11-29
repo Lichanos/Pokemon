@@ -73,10 +73,10 @@ Trainer welcome(){
     return player;
 }
 
-Pokemon generate_pokemon(Trainer player){
+Pokemon generate_pokemon(Trainer player, int i){
     int level;
     int id;
-    srand(time(0));
+    srand(i);
     double power = player.calcPowerLevel();
     if(power > 40){
         id = (int)((151*((double)rand())/RAND_MAX) + 1);
@@ -89,7 +89,8 @@ Pokemon generate_pokemon(Trainer player){
     return Pokemon(id, level);
 }
 
-void play(Trainer player, vector<Trainer> trainers, Map map){
+//i just for passing into generate pokemon
+void step(Trainer player, vector<Trainer> trainers, Map map, int i){
     bool br = false;
     while(!br){
         //Keystroke madness
@@ -98,7 +99,7 @@ void play(Trainer player, vector<Trainer> trainers, Map map){
         int result;
         if(s == "w"){
             if(player.getYPos() > 0){
-                result = player.moveUp(map.tiles[player.getYPos()-1][player.getXPos()]);
+                result = player.moveUp(map.tiles[player.getYPos()-1][player.getXPos()], rand());
             }
             else {
                 cout << "You cannot move any further in this direction." << endl;
@@ -106,7 +107,7 @@ void play(Trainer player, vector<Trainer> trainers, Map map){
         }
         else if(s == "a"){
             if(player.getXPos() > 0){
-                result = player.moveLeft(map.tiles[player.getYPos()][player.getXPos()-1]);
+                result = player.moveLeft(map.tiles[player.getYPos()][player.getXPos()-1], rand());
             }
             else {
                 cout << "You cannot move any further in this direction." << endl;
@@ -114,7 +115,7 @@ void play(Trainer player, vector<Trainer> trainers, Map map){
         }
         else if(s == "s"){
             if(player.getYPos() < (map.getMaxY()-1)){
-                result = player.moveDown(map.tiles[player.getYPos()+1][player.getXPos()]);
+                result = player.moveDown(map.tiles[player.getYPos()+1][player.getXPos()], rand());
             }
             else {
                 cout << "You cannot move any further in this direction." << endl;
@@ -122,7 +123,7 @@ void play(Trainer player, vector<Trainer> trainers, Map map){
         }
         else if(s == "d"){
             if(player.getXPos() < (map.getMaxX() -1)){
-                result = player.moveRight(map.tiles[player.getYPos()][player.getXPos()+1]);
+                result = player.moveRight(map.tiles[player.getYPos()][player.getXPos()+1], rand());
             }
             else {
                 cout << "You cannot move any further in this direction." << endl;
@@ -133,8 +134,10 @@ void play(Trainer player, vector<Trainer> trainers, Map map){
             map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
         }
         else if(result == 2){
-            Pokemon p = generate_pokemon(player);
+            Pokemon p = generate_pokemon(player, i);
             //encounter
+            cout << "encounter" << endl;
+            map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
         }
         else if(result == 3){
             //pokemon center things
@@ -171,7 +174,6 @@ int main(){
     // cout << player.getYPos() << endl;
 
     for(int ii = 0; ii < size*10; ii++){
-        srand(time(0));
         int numPokemon = (int)(4*((double)rand())/RAND_MAX);
         int x;
         int y;
@@ -192,11 +194,16 @@ int main(){
         trainers.push_back(Trainer("PokeFan", x, y));
         map.tiles[trainers.at(ii).getYPos()][trainers.at(ii).getXPos()].setTerrain('!');
         for(int jj = 0; jj < numPokemon; jj++){
-            trainers.at(ii).addPokemon(generate_pokemon(player));
+            trainers.at(ii).addPokemon(generate_pokemon(player, rand()));
         }
     }
 
     map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
+
+    bool quit = false;
+    while(!quit){
+        step(player, trainers, map, rand());
+    }
 
     return 0;
 }

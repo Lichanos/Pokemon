@@ -74,13 +74,13 @@ class Trainer{
         void setYPos(int);
 
         //Moves the trainer up
-        int moveUp(Tile);
+        int moveUp(Tile, int);
         //Moves the trainer down
-        int moveDown(Tile);
+        int moveDown(Tile, int);
         //Moves the trainer left
-        int moveLeft(Tile);
+        int moveLeft(Tile, int);
         //Moves the trianer right
-        int moveRight(Tile);
+        int moveRight(Tile, int);
 
         //Swaps two pokemon
         void swapPokemon(int, int);

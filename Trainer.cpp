@@ -120,15 +120,17 @@ void Trainer::setYPos(int y){
     yPos = y;
 }
 
-int Trainer::moveUp(Tile t){
+int Trainer::moveUp(Tile t, int i){
+    cout << i << endl;
+    srand(i);
     if(t.getTerrain() == '.'){
         yPos--;
         return 1;
     }
     else if(t.getTerrain() == '#'){
         yPos--;
-        srand(time(0));
-        if(6*((double)rand())/RAND_MAX > 5){
+        double test = 8*((double)rand())/RAND_MAX;
+        if(test > 5){
             return 2;
         }
         else{
@@ -154,15 +156,16 @@ int Trainer::moveUp(Tile t){
     return 0;
 }
 
-int Trainer::moveDown(Tile t){
+int Trainer::moveDown(Tile t, int i){
+    srand(i);
     if(t.getTerrain() == '.'){
         yPos++;
         return 1;
     }
     else if(t.getTerrain() == '#'){
         yPos++;
-        srand(time(0));
-        if(6*((double)rand())/RAND_MAX > 5){
+        double test = 8*((double)rand())/RAND_MAX;
+        if(test > 5){
             return 2;
         }
         else{
@@ -188,15 +191,17 @@ int Trainer::moveDown(Tile t){
     return 0;
 }
 
-int Trainer::moveLeft(Tile t){
+int Trainer::moveLeft(Tile t, int i){
+    srand(i);
     if(t.getTerrain() == '.'){
         xPos--;
         return 1;
     }
     else if(t.getTerrain() == '#'){
         xPos--;
-        srand(time(0));
-        if(6*((double)rand())/RAND_MAX > 5){
+        double test = 8*((double)rand())/RAND_MAX;
+        //cout << test << endl;
+        if(test > 5){
             return 2;
         }
         else{
@@ -222,15 +227,17 @@ int Trainer::moveLeft(Tile t){
     return 0;
 }
 
-int Trainer::moveRight(Tile t){
+int Trainer::moveRight(Tile t, int i){
+    srand(i);
     if(t.getTerrain() == '.'){
         xPos++;
         return 1;
     }
     else if(t.getTerrain() == '#'){
         xPos++;
-        srand(time(0));
-        if(6*((double)rand())/RAND_MAX > 5){
+        double test = 8*((double)rand())/RAND_MAX;
+        //cout << test << endl;
+        if(test > 5){
             return 2;
         }
         else{
