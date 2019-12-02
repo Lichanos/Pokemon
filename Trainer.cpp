@@ -121,8 +121,8 @@ void Trainer::setYPos(int y){
 }
 
 int Trainer::moveUp(Tile t, int i){
-    cout << i << endl;
-    srand(i);
+    srand(i+steps);
+    steps++;
     if(t.getTerrain() == '.'){
         yPos--;
         return 1;
@@ -157,7 +157,8 @@ int Trainer::moveUp(Tile t, int i){
 }
 
 int Trainer::moveDown(Tile t, int i){
-    srand(i);
+    srand(i+steps);
+    steps++;
     if(t.getTerrain() == '.'){
         yPos++;
         return 1;
@@ -192,7 +193,8 @@ int Trainer::moveDown(Tile t, int i){
 }
 
 int Trainer::moveLeft(Tile t, int i){
-    srand(i);
+    srand(i+steps);
+    steps++;
     if(t.getTerrain() == '.'){
         xPos--;
         return 1;
@@ -228,7 +230,8 @@ int Trainer::moveLeft(Tile t, int i){
 }
 
 int Trainer::moveRight(Tile t, int i){
-    srand(i);
+    srand(i+steps);
+    steps++;
     if(t.getTerrain() == '.'){
         xPos++;
         return 1;
@@ -275,6 +278,6 @@ double Trainer::calcPowerLevel(){
             total += pokemon.at(ii).getLevel();
         }
     }
-    total/=6;
+    total/2;
     return total;
 }
