@@ -269,13 +269,12 @@ double Trainer::calcPowerLevel(){
         for(Pokemon p : pokemon){
             total += p.getLevel();
         }
-        total/=pokemon.size();
     }
     else{
         for(int ii = 0; ii < 6; ii++){
             total += pokemon.at(ii).getLevel();
         }
-        total/=6;
     }
+    total/=6;
     return total;
 }

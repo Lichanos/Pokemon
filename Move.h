@@ -22,24 +22,30 @@ class Move{
         int maxPP;
         //Current PP of the move
         int PP;
+
+        bool special;
+        bool targetSelf;
     public:
         //Default constructor for move
         Move();
         //Parameterized constructor for move
-        Move(string, string, int, double, int);
+        Move(string, string, int, double, int, bool);
 
         //Returns the move name
         string getMoveName();
         //Returns the move type
         string getMoveType();
         //Returns the stat which the move affects
-        int getStat();
+        int getStatType();
         //Returns the damage of the move
         double getDamage();
         //Returns the max PP of the move
         int getMaxPP();
         //Returns the current PP of the move
         int getPP();
+        //Is the move a special attack or physical attack
+        bool getSpecial();
+        bool getTargetSelf();
 
         //Sets the name of the move
         void setMoveName(string);

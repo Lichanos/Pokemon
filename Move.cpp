@@ -14,6 +14,8 @@ int stat;
 double damage;
 int maxPP;
 int PP;
+bool special;
+bool targetSelf;
 
 Move::Move(){
     moveName = "";
@@ -22,15 +24,17 @@ Move::Move(){
     damage = 0;
     maxPP = 0;
     PP = maxPP;
+    special = false;
 }
 
-Move::Move(string newName, string newType, int newStat, double newDamage, int newMaxPP){
+Move::Move(string newName, string newType, int newStat, double newDamage, int newMaxPP, bool isSpecial){
     moveName = newName;
     moveType = newType;
     stat = newStat;
     damage = newDamage;
     maxPP = newMaxPP;
     PP = maxPP;
+    special = isSpecial;
 }
 
 string Move::getMoveName(){
@@ -41,7 +45,7 @@ string Move::getMoveType(){
     return moveType;
 }
 
-int Move::getStat(){
+int Move::getStatType(){
     return stat;
 }
 
@@ -56,6 +60,15 @@ int Move::getMaxPP(){
 int Move::getPP(){
     return PP;
 }
+
+bool Move::getSpecial(){
+    return special;
+}
+
+bool Move::getTargetSelf(){
+    return targetSelf;
+}
+
 
 void Move::setMoveName(string newName){
     moveName = newName;

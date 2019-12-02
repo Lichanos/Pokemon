@@ -17,7 +17,6 @@
 #include <vector>
 #include <time.h>
 #include <stdio.h>
-#include <stdlib.h>
 using namespace std;
 
 Trainer welcome(){
@@ -62,12 +61,12 @@ Trainer welcome(){
     Pokemon p = Pokemon(pokemonNum, 5);
     int firstSuccess = player.addPokemon(p);
     if(firstSuccess == 1){
-        cout << p.imports[pokemonNum][0] << " was successfully added to your pokedex." << endl; 
+        cout << p.imports[pokemonNum][0] << " was successfully added to your pokedex." << endl << endl; 
     }
     else{
         cout << "There was an error." << endl;
         player.addPokemon(Pokemon(25,5));
-        cout << "Pikachu was successfully added to your pokedex.";
+        cout << "Pikachu was successfully added to your pokedex." << endl << endl;
     }
 
     return player;
@@ -86,11 +85,249 @@ Pokemon generate_pokemon(Trainer player, int i){
         level = (int)((6*((double)rand())/RAND_MAX) - 4);
         id = (int)((143*((double)rand())/RAND_MAX) + 1);
     }
+    if(level < 1){
+        level = 1;
+    }
     return Pokemon(id, level);
+}
+
+int chooseActive(Trainer player, int curr_pokemon){
+    cout << "Change active pokemon" << endl;
+    if(player.pokemon.size() < 6){
+        int ii = 0;
+        for(Pokemon p : player.pokemon){
+            if((player.pokemon).at(ii).getStat(0) > 0 && ii != curr_pokemon){
+                cout << ii << ": " << (player.pokemon).at(ii).getName() << endl;
+            }
+        }
+    }
+    else{
+        for(int ii = 0; ii < 6; ii++){
+            if((player.pokemon).at(ii).getStat(0) > 0 && ii != curr_pokemon){
+                cout << ii << ": " << (player.pokemon).at(ii).getName() << endl;
+            }
+        }
+    }
+    string response = "";
+    bool valid = false;
+    cin >> response;
+    while(!valid){
+        if(response != "1" || response != "2" || response != "3" || response != "4" || response != "5" || response != "0" || response != "cancel"){
+            if(response == "cancel"){
+                return -1;
+            }
+            else{
+                int choice = stoi(response);
+                if((player.pokemon).at(choice).getStat(0) > 0 && choice != curr_pokemon){
+                    return choice;
+                }
+                else{
+                    cout << "Invalid pokemon." << endl;
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+int turn(Trainer player, Pokemon p, int curr_pokemon){
+    cout << "Your power level" << endl;
+    cout << "Current Pokemon: " << (player.pokemon).at(curr_pokemon).getName() << " Lv. " << (player.pokemon).at(curr_pokemon).getLevel() << endl;
+    (player.pokemon).at(curr_pokemon).printStats();
+    cout << endl;
+    cout << "Enemy " << p.getName() << endl;
+    cout << "Lv. " << p.getLevel() << "  HP: " << (p.getStat(0)/p.getMaxStat(0))*100 << "%" << endl;
+    cout << p.getStat(0) << endl;
+    // p.printStats();
+    cout << endl;
+
+    cout << "What do you want to do?" << endl;
+    cout << "1. Attack" << endl;
+    cout << "2. Switch Pokemon" << endl;
+    cout << "3. Bag" << endl;
+    cout << "4. Run" << endl;
+
+    string reply = "";
+    bool valid = false;
+    while(!valid){
+        cin >> reply;
+        if(reply != "1" && reply != "2" && reply != "3" && reply != "4"){
+            cout << "Invalid. Try again." << endl;
+        }
+        else{
+            valid = true;
+        }
+    }
+    if(reply == "1"){
+        int moveNum;
+        int statAffected;
+        (player.pokemon).at(curr_pokemon).printMoves();
+        cin >> moveNum;
+        cout << (player.pokemon).at(curr_pokemon).getName() << " used " << (player.pokemon).at(curr_pokemon).getMove(moveNum-1).getMoveName() << endl;
+        statAffected = (player.pokemon).at(curr_pokemon).getMove(moveNum-1).getStatType();
+        
+        if(statAffected == 0 && (player.pokemon).at(curr_pokemon).getMove(moveNum-1).getSpecial()){
+            p.modStat(0, -1*((player.pokemon).at(curr_pokemon).getMove(moveNum-1).getDamage()) * (player.pokemon).at(curr_pokemon).getStat(3)/p.getStat(4) * 2 * ((double)(player.pokemon).at(curr_pokemon).getLevel())/50);
+        }
+        else if(statAffected != 0 && !(player.pokemon).at(curr_pokemon).getMove(moveNum-1).getTargetSelf()){
+            if(p.getStat(statAffected)/p.getMaxStat(statAffected) != 1){
+                cout << "Reduced effects due to repeated use." << endl;
+            }
+            p.modStat(statAffected, (-1*(player.pokemon).at(curr_pokemon).getMove(moveNum).getDamage()/100)*p.getStat(statAffected));
+        }
+        else if(statAffected != 0 && (player.pokemon).at(curr_pokemon).getMove(moveNum-1).getTargetSelf()){
+            if((player.pokemon).at(curr_pokemon).getStat(statAffected)/(player.pokemon).at(curr_pokemon).getMaxStat(statAffected) != 1){
+                cout << "Reduced effects due to repeated use." << endl;
+            }
+            (player.pokemon).at(curr_pokemon).modStat(statAffected, pow(((player.pokemon).at(curr_pokemon).getMaxStat(statAffected)/(player.pokemon).at(curr_pokemon).getStat(statAffected)),2)*(player.pokemon).at(curr_pokemon).getMove(moveNum).getDamage()/100);
+        }
+        else{
+            double damage_dealt = (-1*((player.pokemon).at(curr_pokemon).getMove(moveNum-1).getDamage()) * (player.pokemon).at(curr_pokemon).getStat(1)/p.getStat(2) * 2 * (((double)(player.pokemon).at(curr_pokemon).getLevel())/50));
+            cout << "damage dealt: " << damage_dealt << endl;
+            p.modStat(0, damage_dealt);
+        }
+        if(p.getStat(0) <= 0){
+            cout << endl << p.getName() << " HP: 0%" << endl;
+            cout << "The enemy " << p.getName() << " has fainted!" << endl;
+            //Adding xp
+            int earned_xp = p.getLevel()*10;
+            (player.pokemon).at(curr_pokemon).setXp((player.pokemon).at(curr_pokemon).getXp() + earned_xp);
+            cout << (player.pokemon).at(curr_pokemon).getName() << " earned " << earned_xp << " xp!" << endl;
+            //levels up
+            if((player.pokemon).at(curr_pokemon).getXp() > (player.pokemon).at(curr_pokemon).getLevel() * 10){
+                (player.pokemon).at(curr_pokemon).setXp((player.pokemon).at(curr_pokemon).getXp() - ((player.pokemon).at(curr_pokemon).getLevel() * 10));
+                (player.pokemon).at(curr_pokemon).levelUp();
+            }
+            //cout << "about to return 1" << endl;
+            return 1;
+        }
+    }
+    else if(reply == "2"){        
+        int temp = chooseActive(player, curr_pokemon);
+        if(temp != -1){
+            curr_pokemon = temp;
+        }
+        else{
+            //Technically recursion :)
+            return turn(player, p, curr_pokemon);
+        }
+    }
+    //bag stuff
+    else if(reply == "3"){
+        // int ii = 1;
+        // cout << "Choose which item to use" << endl;
+        // for(Item i : player.items){
+        //     cout << ii << ". " << player.items.at(ii).getItemName() << endl;
+        // }
+        // bool valid = false;
+        // while(!valid){
+
+        // }
+    }
+    //Run
+    else if(reply == "4"){
+        cout << "You have successfully escaped!" << endl;
+        return 2;
+    }
+    else{
+        cout << "Invalid response." << endl;
+    }
+    return 0;
+}
+
+//ENCOUNTER
+void encounter(Trainer player, Pokemon p, int i){
+    srand(i+player.getSteps());
+    cout << "You've encountered a wild " << p.getName() << endl;
+    bool resolved = false;
+    int reply = 0;
+    int curr_pokemon;
+    for(int ii = 0; ii < 6; ii++){
+        if(player.getPokemonAt(ii).getStat(0) > 0){
+            curr_pokemon = ii;
+            break;
+        }
+    }
+
+    while(!resolved){
+        cout << "Your turn." << endl;
+        int result = 0;
+        result = turn(player, p, curr_pokemon);
+        //cout << result << endl;
+        if(result == 1){
+            resolved = true;
+        }
+        else if(result == 2){
+            resolved = true;
+        }
+        else{
+            cout << "Enemy's turn." << endl;
+            double decision;
+            decision = p.getNumMoves()*((double)rand())/RAND_MAX;
+            int moveNum;
+            if(decision < 1){
+                moveNum = 0;
+            }
+            else if(decision < 2){
+                moveNum = 1;
+            }
+            else if(decision < 3){
+                moveNum = 2;
+            }
+            else{
+                moveNum = 3;
+            }
+            int statAffected = p.getMove(moveNum).getStatType();
+            if(statAffected == 0 && p.getMove(moveNum).getSpecial()){
+                double damage_dealt = -1*(p.getMove(moveNum).getDamage()) * p.getStat(3)/(player.pokemon).at(curr_pokemon).getStat(4) * 2 * ((double)p.getLevel())/50;
+                (player.pokemon).at(curr_pokemon).modStat(0, damage_dealt);
+            }
+            else if(statAffected != 0 && !p.getMove(moveNum).getTargetSelf()){
+                (player.pokemon).at(curr_pokemon).modStat(statAffected, -1*(p.getMove(moveNum).getDamage()/100)*(player.pokemon).at(curr_pokemon).getStat(statAffected));
+            }
+            else if(statAffected != 0 && p.getMove(moveNum).getTargetSelf()){
+                p.modStat(statAffected, pow(p.getMaxStat(statAffected)/p.getStat(statAffected),2)*(p.getMove(moveNum).getDamage()/100));
+            }
+            else{
+                double damage_dealt = -1*(p.getMove(moveNum).getDamage()) * p.getStat(1)/(player.pokemon).at(curr_pokemon).getStat(2) * 2 * ((double)p.getLevel())/50;
+                (player.pokemon).at(curr_pokemon).modStat(0, damage_dealt);
+            }
+            cout << p.getName() << " used " << p.getMove(moveNum).getMoveName() << "!" << endl;
+            cout << endl; 
+
+            if((player.pokemon).at(curr_pokemon).getStat(0) < 0){
+                cout << (player.pokemon).at(curr_pokemon).getName() << " has fainted" << endl;
+                curr_pokemon = chooseActive(player, curr_pokemon);
+            }
+        }
+
+        //Restores all non-hp stats to normal
+        if(player.getPokemon().size() < 6){
+            int ii = 0;
+            for(Pokemon p : player.getPokemon()){
+                for(int jj = 1; jj < 6; jj++){
+                    ((player.pokemon).at(ii)).setStat(jj, player.getPokemonAt(ii).getMaxStat(jj));
+                }
+                ii++;
+            }
+        }
+        else{
+            for(int ii = 0; ii < 6; ii++){
+                for(int jj = 1; jj < 6; jj++){
+                    ((player.pokemon).at(ii)).setStat(jj, player.getPokemonAt(ii).getMaxStat(jj));
+                }
+            }
+        }
+    }
+}
+
+void encounter(Trainer player, Trainer t, int i){
+    
 }
 
 //i just for passing into generate pokemon
 void step(Trainer player, vector<Trainer> trainers, Map map, int i){
+    srand(i+player.getSteps());
     bool br = false;
     while(!br){
         //Keystroke madness
@@ -136,7 +373,7 @@ void step(Trainer player, vector<Trainer> trainers, Map map, int i){
         else if(result == 2){
             Pokemon p = generate_pokemon(player, i);
             //encounter
-            cout << "encounter" << endl;
+            encounter(player, p, rand());
             map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
         }
         else if(result == 3){
@@ -150,11 +387,14 @@ void step(Trainer player, vector<Trainer> trainers, Map map, int i){
 
 int main(){
     Trainer player = welcome();
+    player.addItem(Item("Pokeball",10));
+    player.addItem(Item("Potion",5));
     vector<Trainer> trainers;
     
     cout << "Half-sized map or full-sized map? (Enter \"1\" or \"2\"): ";
     int size; cin >> size; 
     cout << "What should the map's seed be? (0 for defualt)" << endl;
+    cout << "Note: The the seed only impacts the map, not the placement of the player." << endl;
     int seed; cin >> seed;
     Map map = Map(size, seed);
     map.printMap();

@@ -16,12 +16,6 @@ class Trainer{
     private:
         //Name of trainer
         string playerName;
-        //Vector of pokemon belonging to trainer
-        vector<Pokemon> pokemon;
-        //Vector of items belonging to trainer
-        vector<Item> items;
-        //Vector of strings (badges) belonging to trainer
-        vector<string> badges;
         //Number of steps trainer has taken
         int steps;
         //Power rating of trainer
@@ -33,6 +27,12 @@ class Trainer{
         //If the trainer is at a pokemon center
         bool atCenter;
     public:
+        //Vector of pokemon belonging to trainer
+        vector<Pokemon> pokemon;
+        //Vector of items belonging to trainer
+        vector<Item> items;
+        //Vector of strings (badges) belonging to trainer
+        vector<string> badges;
         //Default constructor for Trainer
         Trainer();
         //Parameterized constructor for trainer

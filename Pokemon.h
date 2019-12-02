@@ -35,6 +35,8 @@ class Pokemon{
         //IVs for stats
         int iv[6];
 
+        int numMoves;
+
     public:
         //Import array which the file reads into
         string imports[152][9];
@@ -78,6 +80,8 @@ class Pokemon{
         void setXp(int);
         //Changes stat of a certain index by a certain amount
         void modStat(int, double);
+        //Sets a stat
+        void setStat(int, double);
 
         //Gets a move by an index
         Move getMove(int);
@@ -90,5 +94,13 @@ class Pokemon{
         void levelUp();
         //Adds xp
         void addXp(int n);
+
+        //prints moves
+        void printMoves();
+
+        //prints stats
+        void printStats();
+
+        int getNumMoves();
 };
 #endif

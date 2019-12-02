@@ -21,6 +21,7 @@ string nickname;
 int level;
 int xp;
 string type[2] = {};
+int numMoves;
 Move moves[4] = {};
 
 double maxStat[6];
@@ -115,7 +116,7 @@ int initialize(string imports[152][9], double affinities[152][6]){
     for(int ii = 1; ii < 152; ii++){
         //cout << ii << ": ";
         for(int jj = 0; jj < 6; jj++){
-            affinities[ii][jj] = stod(imports[ii][jj + 1]);
+            affinities[ii][jj] = .025*stod(imports[ii][jj + 1]);
             //cout << affinities[ii][jj] << ", ";
         }
         //cout << endl;
@@ -158,9 +159,10 @@ Pokemon::Pokemon(){
         tempStat[ii] = maxStat[ii];
     }
 
-    moves[0] = Move("Tackle","Normal",0,40.0,30);
-    moves[1] = Move(imports[id][8] + "Whack","Normal",0,50.0,20);
-    moves[2] = Move("Tail whip","Normal",2,20,25);
+    moves[0] = Move("Tackle","Normal",0,40.0,30, false);
+    moves[1] = Move(imports[id][7] + " Whack",imports[id][8],0,50.0,20, false);
+    moves[2] = Move("Tail whip","Normal",2,20,25, false);
+    numMoves = 3;
 }
 
 Pokemon::Pokemon(int ID, int startLevel){
@@ -194,9 +196,10 @@ Pokemon::Pokemon(int ID, int startLevel){
         tempStat[ii] = maxStat[ii];
     }
 
-    moves[0] = Move("Tackle","Normal",0,40.0,30);
-    moves[1] = Move(imports[id][8] + "Whack","Normal",0,50.0,20);
-    moves[2] = Move("Tail whip","Normal",2,20,25);
+    moves[0] = Move("Tackle","Normal",0,40.0,30, false);
+    moves[1] = Move(imports[id][7] + " Whack", imports[id][8],0,50.0,20, false);
+    moves[2] = Move("Tail whip","Normal",2,20,25, false);
+    numMoves = 3;
 }
 
 string Pokemon::getName(){
@@ -248,6 +251,10 @@ void Pokemon::setXp(int newXp){
 }
 
 void Pokemon::modStat(int i, double newStat){
+    tempStat[i] += newStat;
+}
+
+void Pokemon::setStat(int i, double newStat){
     tempStat[i] = newStat;
 }
 
@@ -279,4 +286,24 @@ void Pokemon::levelUp(){
 
 void Pokemon::addXp(int n){
     xp += n;
+}
+
+void Pokemon::printMoves(){
+    for(int ii = 0; ii < numMoves; ii++){
+        cout << ii+1 << ". " << moves[ii].getMoveName() << ": " << moves[ii].getDamage() << " dmg" <<endl;
+    }
+}
+
+void Pokemon::printStats(){
+    cout << "Stats:" << endl;
+    cout << "HP: " << (int)tempStat[0] << "    " << (int)(100*tempStat[0]/maxStat[0]) << "%" << endl;
+    cout << "Attack: " << (int)tempStat[1] << endl;
+    cout << "Defense: " << (int)tempStat[2] << endl;
+    cout << "Special Attack: " << (int)tempStat[3] << endl;
+    cout << "Special Defense: " << (int)tempStat[4] << endl;
+    cout << "Speed: " << (int)tempStat[5] << endl;
+}
+
+int Pokemon::getNumMoves(){
+    return numMoves;
 }
