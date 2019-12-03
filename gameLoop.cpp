@@ -498,6 +498,114 @@ int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
     return 0;
 }
 
+void bag(Trainer &player){
+    string s2;
+    string s1;
+    int choice;
+    int heal = 0;
+    int ii = 1;
+    for(Item i : player.items){
+        cout << ii << ". " << i.getItemName() << ": " << i.getNumber() << endl;
+        ii++;
+    }
+    cout << endl << "Type the number of an item to use it." << endl;
+    cin >> s1;
+    if(s1 == "1" || s1 == "2" || s1 == "3" || s1 == "4" || s1 == "5" || s1 == "6"){
+        if((stoi(s1)-1) >= 0 && stoi(s1)-1 < player.items.size()){
+            choice = stoi(s1)-1;
+            if(player.items.at(choice).getItemName() == "Potion"){
+                heal = 20;
+            }
+            else if(player.items.at(choice).getItemName() == "Super Potion"){
+                heal = 50;
+            }
+            else if(player.items.at(choice).getItemName() == "Hyper Potion"){
+                heal = 200;
+            }
+
+            if(heal > 0){
+                cout << "Choose a pokemon to heal:" << endl;
+                if(player.pokemon.size() < 6){
+                    int jj = 1;
+                    for(Pokemon p1 : player.pokemon){
+                        cout << jj << ". " << p1.getName() << "  HP: " << p1.getStat(0) << "/" << p1.getMaxStat(0) << endl;
+                        player.items.at(choice).decrement();
+                    }
+                    jj++;
+                }
+                else{
+                    for(int jj = 1; jj < 7; jj++){
+                        cout << jj << ". " << player.pokemon.at(jj).getName() << "  HP: " << player.pokemon.at(jj).getStat(0) << "/" << player.pokemon.at(jj).getMaxStat(0) << endl;
+                    }
+                }
+                cin >> s2;
+                if(s2 == "1" || s2 == "2" || s2 == "3" || s2 == "4" || s2 == "5" || s2 == "6"){
+                    player.pokemon.at(stoi(s2)-1).modStat(0, heal);
+                }
+                else{
+                    cout << "Invalid pokemon" << endl;
+                }
+            }
+        }
+        else{
+            cout << "Invalid item" << endl;
+        }
+    }
+    else{
+        cout << "Invalid response" << endl;
+    }
+    cout << endl;
+}
+
+void pokemanip(Trainer &player){
+    cout << endl;
+    for(Pokemon p : player.pokemon){
+        cout << "Name: " << p.getName() << endl;
+        for(int ii = 0; ii < 2; ii++){
+            cout << p.type[ii] << " ";
+        }
+        cout << endl;
+        cout << "Level: " << p.getLevel() << endl;
+        cout << "XP: " << p.getXp() << endl;
+        cout << endl;
+        cout << "HP, Attack, Defense, Special Attack, Special Defense, Speed" << endl;
+        for(int ii = 0; ii < 6; ii++){
+            cout << p.getStat(ii) << "/" << p.getMaxStat(ii) << endl;
+        }
+        cout << endl;
+        cout << "IVs" <<endl;
+        for(int jj = 0; jj < 6; jj++){
+            cout << p.getIv(jj) << endl;
+        }
+        cout << endl;
+        cout << "Moves" << endl;
+        for(int kk = 0; kk < p.getNumMoves(); kk++){
+            cout << p.getMove(kk).getMoveName() << "  Power: " << p.getMove(kk).getDamage() << endl;
+        }
+    }
+    cout << endl;
+    cout << "Select a pokemon to move to the front of your party. Enter any invalid command to cancel." << endl;
+    if(player.pokemon.size() < 6){
+        int jj = 0;
+        for(Pokemon p : player.pokemon){
+            cout << jj << ": " << p.getName() << "   " << p.getStat(0) << "/" << p.getMaxStat(0) << endl;
+        }
+    }
+    else{
+        for(int jj = 0; jj < 6; jj++){
+            cout << jj << ": " << player.pokemon.at(jj).getName() << "   " << player.pokemon.at(jj).getStat(0) << "/" << player.pokemon.at(jj).getMaxStat(0) << endl;
+        }
+    }
+    string swap;
+    cin >> swap;
+    if(swap == "1" || swap == "2" || swap == "3" || swap == "4" || swap == "5" || swap == "6"){
+        Pokemon placeholder = player.pokemon.at(stoi(swap)-1);
+        player.pokemon.at(stoi(swap)-1) = player.pokemon.at(0);
+        player.pokemon.at(0) = placeholder;
+    }
+    cout << endl;
+}
+
 //i just for passing into generate pokemon
 int step(Trainer player, vector<Trainer> trainers, Map map, int i){
     srand(i+player.getSteps());
@@ -543,80 +651,10 @@ int step(Trainer player, vector<Trainer> trainers, Map map, int i){
             cout << "use w/a/s/d to move. bag to look in bag. pokemon to see stats of your pokemon." << endl;
         }
         else if(s == "bag"){
-            string s2;
-            int choice;
-            int heal = 0;
-            int ii = 1;
-            for(Item i : player.items){
-                cout << ii << ". " << i.getItemName() << ": " << i.getNumber() << endl;
-            }
-            cout << endl << "Type the number of an item to use it." << endl;
-            cin >> s2;
-            if(s2 == "1" || s2 == "2" || s2 == "3" || s2 == "4" || s2 == "5" || s2 == "6"){
-                if((stoi(s2)-1) >= 0 && stoi(s2)-1 < player.items.size()){
-                    choice = stoi(s2)-1;
-                }
-                if(player.items.at(choice).getItemName() == "Potion"){
-                    heal = 20;
-                }
-                else if(player.items.at(choice).getItemName() == "Super Potion"){
-                    heal = 50;
-                }
-                else if(player.items.at(choice).getItemName() == "Hyper Potion"){
-                    heal = 200;
-                }
-
-                if(heal > 0){
-                    cout << "Choose a pokemon to heal:" << endl;
-                    if(player.pokemon.size() < 6){
-                        int jj = 1;
-                        for(Pokemon p1 : player.pokemon){
-                            cout << jj << ". " << p1.getName() << "  HP: " << p1.getStat(0) << "/" << p1.getMaxStat(0) << endl;
-                        }
-                        jj++;
-                    }
-                    else{
-                        for(int jj = 1; jj < 7; jj++){
-                            cout << jj << ". " << player.pokemon.at(jj).getName() << "  HP: " << player.pokemon.at(jj).getStat(0) << "/" << player.pokemon.at(jj).getMaxStat(0) << endl;
-                        }
-                    }
-                    cin >> s2;
-                    if(s2 == "1" || s2 == "2" || s2 == "3" || s2 == "4" || s2 == "5" || s2 == "6"){
-                        player.pokemon.at(stoi(s2)-1).modStat(0, heal);
-                    }
-                    else{
-                        cout << "Invalid pokemon" << endl;
-                    }
-                }
-            }
-            ii++;
+            bag(player);
         }
         else if(s == "pokemon"){
-            cout << endl;
-            for(Pokemon p : player.pokemon){
-                cout << "Name: " << p.getName() << endl;
-                for(int ii = 0; ii < 2; ii++){
-                    cout << p.type[ii] << " ";
-                }
-                cout << endl;
-                cout << "Level: " << p.getLevel() << endl;
-                cout << "XP: " << p.getXp() << endl;
-                cout << endl;
-                cout << "HP, Attack, Defense, Special Attack, Special Defense, Speed" << endl;
-                for(int ii = 0; ii < 6; ii++){
-                    cout << p.getStat(ii) << "/" << p.getMaxStat(ii) << endl;
-                }
-                cout << endl;
-                cout << "IVs" <<endl;
-                for(int jj = 0; jj < 6; jj++){
-                    cout << p.getIv(jj) << endl;
-                }
-                cout << endl;
-                cout << "Moves" << endl;
-                for(int kk = 0; kk < p.getNumMoves(); kk++){
-                    cout << p.getMove(kk).getMoveName() << "  Power: " << p.getMove(kk).getDamage() << endl;
-                }
-            }
+            pokemanip(player);
         }
 
         if(result == 1){
