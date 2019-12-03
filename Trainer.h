@@ -26,6 +26,8 @@ class Trainer{
         int yPos;
         //If the trainer is at a pokemon center
         bool atCenter;
+
+        int money;
     public:
         //Vector of pokemon belonging to trainer
         vector<Pokemon> pokemon;
@@ -87,5 +89,9 @@ class Trainer{
 
         //Calculates power level
         double calcPowerLevel();
+
+        int getMoney();
+        void modMoney(int);
+        void setMoney(int);
 };
 #endif

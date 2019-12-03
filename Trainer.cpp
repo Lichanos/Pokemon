@@ -20,6 +20,7 @@ int steps;
 double power;
 int xPos;
 int yPos;
+int money;
 
 Trainer::Trainer(){
     playerName = "";
@@ -83,6 +84,18 @@ int Trainer::getXPos(){
 
 int Trainer::getYPos(){
     return yPos;
+}
+
+int Trainer::getMoney(){
+    return money;
+}
+
+void Trainer::modMoney(int newMoney){
+    money += newMoney;
+}
+
+void Trainer::setMoney(int newMoney){
+    money = newMoney;
 }
 
 void Trainer::setName(string name){
@@ -278,6 +291,6 @@ double Trainer::calcPowerLevel(){
             total += pokemon.at(ii).getLevel();
         }
     }
-    total/2;
+    total/4;
     return total;
 }

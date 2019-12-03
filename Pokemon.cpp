@@ -36,8 +36,8 @@ int Pokemon::getIv(){
     unsigned seed = chrono::system_clock::now().time_since_epoch().count() + rand();
     default_random_engine generator (seed);
     int number = -1;
-    normal_distribution<double> distribution (18,9);
-    while(number > 36.99 || number < 0){
+    normal_distribution<double> distribution (12,7);
+    while(number > 31.999 || number < 0){
         number = (int)distribution(generator);
     }
     return (int)number;
