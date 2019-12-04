@@ -28,9 +28,9 @@ Trainer welcome(){
     cout << "Please state your name: ";
     cin >> username;
     cout << "Welcome, " << username << "!" << endl;
-    cout << "Before you can begin your Pokémon adventure, you must choose a starting Pokémon, courtesy of the Professor." << endl;
+    cout << "Before you can begin your Pokemon adventure, you must choose a starting Pokemon, courtesy of the Professor." << endl;
     while(!valid){
-        cout << "Please choose from the following Pokémon:" << endl;
+        cout << "Please choose from the following Pokemon:" << endl;
         cout << "   1. Bulbasaur" << endl;
         cout << "   2. Charmander" << endl;
         cout << "   3. Squirtle" << endl;
@@ -358,7 +358,7 @@ int yourTurn(Trainer &player, Pokemon &p, int &player_pokemon){
 }
 
 int enemyTurn(Pokemon &your_pokemon, Pokemon &p, int i){
-    srand((int)(i + your_pokemon.getIv(0) + p.getIv(0) + your_pokemon.getStat(0) + p.getStat(0)));
+    //srand((int)(i + your_pokemon.getIv(0) + p.getIv(0) + your_pokemon.getStat(0) + p.getStat(0)));
     cout << "Enemy's turn" << endl;
     double decision;
     decision = p.getNumMoves()*((double)rand())/RAND_MAX;
@@ -386,7 +386,7 @@ int enemyTurn(Pokemon &your_pokemon, Pokemon &p, int i){
 
 //ENCOUNTER
 int encounter(Trainer &player, Pokemon &p, int i){
-    srand(i+player.getSteps());
+    //srand(i+player.getSteps());
     cout << "You've encountered a wild " << p.getName() << endl;
     bool resolved = false;
     int reply = 0;
@@ -446,10 +446,12 @@ int encounter(Trainer &player, Pokemon &p, int i){
 
 int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
     cout << "You have been challenged by " << t.getName() << "!" << endl;
-    srand(i+player.getSteps());
+    cout << "Number of pokemon: " << t.pokemon.size() << endl;
+    //srand(i+player.getSteps());
     bool resolved = false;
     int player_pokemon;
     int trainer_pokemon = 0;
+    cout << endl << t.getName() << " sent out " << t.pokemon.at(trainer_pokemon).getName() << "!" << endl;
     for(int ii = 0; ii < 6; ii++){
         if(player.getPokemonAt(ii).getStat(0) > 0){
             player_pokemon = ii;
@@ -466,14 +468,15 @@ int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
                     for(Pokemon poke : t.pokemon){
                         if(poke.getStat(0) > 0){
                             trainer_pokemon = search;
-                            cout << t.getName() << " sent out " << t.pokemon.at(trainer_pokemon).getName() << "!" << endl;
+                            cout << endl << t.getName() << " sent out " << t.pokemon.at(trainer_pokemon).getName() << "!" << endl;
                         }
+                        search ++;
                     }
                     if(t.pokemon.at(trainer_pokemon).getStat(0) <= 0){
                         cout << "You have defeated " << t.getName() << "!" << endl;
                         int money = (600 + (1000*(double)rand())/RAND_MAX);
                         player.modMoney(money);
-                        cout << "You gained " << money << "from winning!" << endl;
+                        cout << "You gained " << money << " from winning!" << endl;
                         tile.setTerrain('.');
                         return 0;
                     }
@@ -676,7 +679,6 @@ void pokemanip(Trainer &player, bool atMart){
 
 //i just for passing into generate pokemon
 int step(Trainer player, vector<Trainer> trainers, Map map, int i){
-    srand(i+player.getSteps());
     bool br = false;
     while(!br){
         //Keystroke madness
@@ -723,6 +725,7 @@ int step(Trainer player, vector<Trainer> trainers, Map map, int i){
         }
         else if(s == "pokemon"){
             pokemanip(player, false);
+            map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
         }
 
         if(result == 1){
@@ -754,6 +757,14 @@ int step(Trainer player, vector<Trainer> trainers, Map map, int i){
         else if(result == 5){
             //mart things
         }
+        else if(result == 6){
+            for(Trainer t : trainers){
+                if(t.getXPos() - player.getXPos() >= -1 && t.getXPos() - player.getXPos() <= 1 && t.getYPos() - player.getYPos() >= -1 && t.getYPos() - player.getYPos() <= 1){
+                    encounter(player, t, map.tiles[t.getYPos()][t.getXPos()],0);
+                    break;
+                }
+            }
+        }
     }
     return 0;
 }
@@ -771,7 +782,9 @@ int main(){
     int seed; cin >> seed;
     Map map = Map(size, seed);
     map.printMap();
-    srand(time(0) + player.getSteps());
+
+    srand(time(0));
+
     bool valid_terrain = false;
     while(!valid_terrain){
         int y = (int)(map.getMaxY()*((double)(rand())/RAND_MAX));
@@ -784,7 +797,8 @@ int main(){
     }
 
     for(int ii = 0; ii < size*10; ii++){
-        int numPokemon = (int)(4*((double)rand())/RAND_MAX);
+        //Number of pokemon between 1 and 4
+        int numPokemon = (int)(3*((double)rand())/RAND_MAX) + 1;
         int x;
         int y;
 

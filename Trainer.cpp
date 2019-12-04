@@ -134,7 +134,6 @@ void Trainer::setYPos(int y){
 }
 
 int Trainer::moveUp(Tile t, int i){
-    srand(i+steps);
     steps++;
     if(t.getTerrain() == '.'){
         yPos--;
@@ -162,6 +161,10 @@ int Trainer::moveUp(Tile t, int i){
         else{
             return 4;
         }
+    }
+    else if(t.getTerrain() == '!'){
+        cout << "A trainer blocks your path." << endl;
+        return 6;
     }
     else{
         return 0;
@@ -170,7 +173,6 @@ int Trainer::moveUp(Tile t, int i){
 }
 
 int Trainer::moveDown(Tile t, int i){
-    srand(i+steps);
     steps++;
     if(t.getTerrain() == '.'){
         yPos++;
@@ -198,6 +200,10 @@ int Trainer::moveDown(Tile t, int i){
         else{
             return 4;
         }
+    }
+    else if(t.getTerrain() == '!'){
+        cout << "A trainer blocks your path." << endl;
+        return 6;
     }
     else{
         return 0;
@@ -206,7 +212,6 @@ int Trainer::moveDown(Tile t, int i){
 }
 
 int Trainer::moveLeft(Tile t, int i){
-    srand(i+steps);
     steps++;
     if(t.getTerrain() == '.'){
         xPos--;
@@ -235,6 +240,10 @@ int Trainer::moveLeft(Tile t, int i){
         else{
             return 4;
         }
+    }
+    else if(t.getTerrain() == '!'){
+        cout << "A trainer blocks your path." << endl;
+        return 6;
     }
     else{
         return 0;
@@ -243,7 +252,6 @@ int Trainer::moveLeft(Tile t, int i){
 }
 
 int Trainer::moveRight(Tile t, int i){
-    srand(i+steps);
     steps++;
     if(t.getTerrain() == '.'){
         xPos++;
@@ -272,6 +280,10 @@ int Trainer::moveRight(Tile t, int i){
         else{
             return 4;
         }
+    }
+    else if(t.getTerrain() == '!'){
+        cout << "A trainer blocks your path." << endl;
+        return 6;
     }
     else{
         return 0;

@@ -138,7 +138,6 @@ Pokemon::Pokemon(){
     type[0] = imports[id][8];
     type[1] = imports[id][9];
 
-    srand(time(0));
     for(int ii = 0; ii < 6; ii++){
         statAff[ii] = affinities[25][ii];
         iv[ii] = getIv();
@@ -175,7 +174,6 @@ Pokemon::Pokemon(int ID, int startLevel){
     type[0] = imports[ID][8];
     type[1] = imports[ID][9];
 
-    srand(time(0));
     for(int ii = 0; ii < 6; ii++){
         statAff[ii] = affinities[ID][ii];
         iv[ii] = getIv();
