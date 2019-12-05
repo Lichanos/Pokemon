@@ -77,7 +77,7 @@ Pokemon generatePokemon(Trainer &player, int i){
     int id;
     double rand1 = ((double)rand())/RAND_MAX;
     double rand2 = ((double)rand())/RAND_MAX;
-    cout << "Randoms: " << rand1 << " " << rand2 << endl;
+    //cout << "Randoms: " << rand1 << " " << rand2 << endl;
     double power = player.calcPowerLevel();
     if(power > 40){
         id = (int)(151*(rand1) + 1);
@@ -99,7 +99,7 @@ int chooseActive(Trainer &player, int curr_pokemon){
     if(player.pokemon.size() < 6){
         int ii = 0;
         for(Pokemon p : player.pokemon){
-            if((player.pokemon).at(ii).getStat(0) > 0 && ii != curr_pokemon){
+            if((player.pokemon).at(ii).getStat(0) > 0){
                 cout << ii+1 << ": " << (player.pokemon).at(ii).getName() << "  HP: " << player.pokemon.at(ii).getStat(0) << endl;
                 fainted = false;
             }
@@ -108,13 +108,13 @@ int chooseActive(Trainer &player, int curr_pokemon){
     }
     else{
         for(int ii = 0; ii < 6; ii++){
-            if((player.pokemon).at(ii).getStat(0) > 0 && ii != curr_pokemon){
+            if((player.pokemon).at(ii).getStat(0) > 0){
                 cout << ii+1 << ": " << (player.pokemon).at(ii).getName() << "  HP: " << player.pokemon.at(ii).getStat(0) << endl;
                 fainted = false;
             }
         }
     }
-    if(fainted && player.pokemon.at(curr_pokemon).getStat(0) <= 0){
+    if(fainted){
         return -3;
     }
     string response = "";
@@ -342,6 +342,7 @@ int yourTurn(Trainer &player, Pokemon &p, int &player_pokemon){
             }
             if(player.pokemon.at(player_pokemon).getStat(0) > player.pokemon.at(player_pokemon).getMaxStat(0)){
                 player.pokemon.at(player_pokemon).setStat(0, player.pokemon.at(player_pokemon).getMaxStat(0));
+                cout << endl << "Used the potion" << endl;
             }
         }
         //Run
@@ -379,7 +380,7 @@ int enemyTurn(Pokemon &your_pokemon, Pokemon &p, int i){
     if(your_pokemon.getStat(0) <= 0){
         your_pokemon.setStat(0,0);
         cout << your_pokemon.getName() << " fainted!" << endl;
-        return 1;
+        return 2;
     }
     return 0;
 }
@@ -409,16 +410,14 @@ int encounter(Trainer &player, Pokemon &p, int i){
         else{
             int outcome;
             outcome = enemyTurn(player.pokemon.at(curr_pokemon), p, i);
-            if(outcome == 1){
+            if(outcome == 2){
                 int outcome2 = -1;
-                while(outcome2 < 0){
-                    outcome2 = chooseActive(player, curr_pokemon);
-                    if(outcome2){
-                        cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
-                        return -3;
-                    }
+                outcome2 = chooseActive(player, curr_pokemon);
+                if(outcome2 == -3){
+                    cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
+                    return -3;
                 }
-                if(outcome2 >= 0){
+                else if(outcome2 >= 0){
                     curr_pokemon = outcome2;
                 }
             }
@@ -458,10 +457,59 @@ int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
             break;
         }
     }
+    bool caused_faint = false;;
     while(!resolved){
+        //cout << player.pokemon.at(player_pokemon).getStat(5) << " " << t.pokemon.at(trainer_pokemon).getStat(5) << endl;
         if(player.pokemon.at(player_pokemon).getStat(5) >= t.pokemon.at(trainer_pokemon).getStat(5)){
+            int outcome = 1;
+            caused_faint = false;
+            outcome = yourTurn(player, t.pokemon.at(trainer_pokemon), player_pokemon);
+            if(outcome == 2){
+                caused_faint = true;
+                int search = 0;
+                for(Pokemon poke : t.pokemon){
+                    if(poke.getStat(0) > 0){
+                        trainer_pokemon = search;
+                        cout << endl << t.getName() << " sent out " << t.pokemon.at(trainer_pokemon).getName() << "!" << endl;
+                    }
+                    search ++;
+                }
+                if(t.pokemon.at(trainer_pokemon).getStat(0) <= 0){
+                    cout << "You have defeated " << t.getName() << "!" << endl;
+                    int money = (600 + (1000*(double)rand())/RAND_MAX);
+                    player.modMoney(money);
+                    cout << "You gained " << money << " from winning!" << endl;
+                    tile.setTerrain('.');
+                    return 0;
+                }
+            }
+            if(!caused_faint){
+                outcome = enemyTurn(player.pokemon.at(player_pokemon), t.pokemon.at(trainer_pokemon), i);
+                if(outcome == 2){
+                    int temp;
+                    temp = chooseActive(player, player_pokemon);
+                    if(temp == -3){
+                        cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
+                        return -3;
+                    }
+                    player_pokemon = temp;
+                }
+            }
+        }
+        else{
             int outcome;
-            while(outcome > 0){
+            outcome = enemyTurn(player.pokemon.at(player_pokemon), t.pokemon.at(trainer_pokemon), i);
+            if(outcome == 2){
+                caused_faint = true;
+                int temp;
+                temp = chooseActive(player, player_pokemon);
+                if(temp == -3){
+                    cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
+                    return -3;
+                }
+                player_pokemon = temp;
+            }
+            if(!caused_faint){
                 outcome = yourTurn(player, t.pokemon.at(trainer_pokemon), player_pokemon);
                 if(outcome == 2){
                     int search = 0;
@@ -478,24 +526,10 @@ int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
                         player.modMoney(money);
                         cout << "You gained " << money << " from winning!" << endl;
                         tile.setTerrain('.');
-                        return 0;
+                        return 2;
                     }
                 }
             }
-            outcome = enemyTurn(player.pokemon.at(player_pokemon), t.pokemon.at(trainer_pokemon), i);
-            if(outcome == 2){
-                int temp;
-                while(temp < 0){
-                    temp = chooseActive(player, player_pokemon);
-                    if(temp == -3){
-                        cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
-                        return -3;
-                    }
-                }
-                player_pokemon = temp;
-            }
-        }
-        else{
         }
     }
     return 0;
@@ -533,8 +567,8 @@ void bag(Trainer &player){
                     for(Pokemon p1 : player.pokemon){
                         cout << jj << ". " << p1.getName() << "  HP: " << p1.getStat(0) << "/" << p1.getMaxStat(0) << endl;
                         player.items.at(choice).decrement();
+                        jj++;
                     }
-                    jj++;
                 }
                 else{
                     for(int jj = 1; jj < 7; jj++){
@@ -544,6 +578,9 @@ void bag(Trainer &player){
                 cin >> s2;
                 if(s2 == "1" || s2 == "2" || s2 == "3" || s2 == "4" || s2 == "5" || s2 == "6"){
                     player.pokemon.at(stoi(s2)-1).modStat(0, heal);
+                    if(player.pokemon.at(stoi(s2)-1).getStat(0) > player.pokemon.at(stoi(s2)-1).getMaxStat(0)){
+                        player.pokemon.at(stoi(s2)-1).setStat(0 , player.pokemon.at(stoi(s2)-1).getMaxStat(0));
+                    }
                 }
                 else{
                     cout << "Invalid pokemon" << endl;
@@ -632,9 +669,11 @@ void pokemanip(Trainer &player, bool atMart){
         string swap;
         cin >> swap;
         if(swap == "1" || swap == "2" || swap == "3" || swap == "4" || swap == "5" || swap == "6"){
-            Pokemon placeholder = player.pokemon.at(stoi(swap)-1);
-            player.pokemon.at(stoi(swap)-1) = player.pokemon.at(0);
-            player.pokemon.at(0) = placeholder;
+            if(stoi(swap)-1 < player.pokemon.size()){
+                Pokemon placeholder = player.pokemon.at(stoi(swap)-1);
+                player.pokemon.at(stoi(swap)-1) = player.pokemon.at(0);
+                player.pokemon.at(0) = placeholder;
+            }
         }
         cout << endl;
     }
@@ -678,7 +717,14 @@ void pokemanip(Trainer &player, bool atMart){
 }
 
 //i just for passing into generate pokemon
-int step(Trainer player, vector<Trainer> trainers, Map map, int i){
+/**
+ * The loop which runs the player move cycle
+ * Gets input from user
+ * Checks to make sure the movement does not go off the map, if it doesn't calls the appropriate move player function
+ * The move player function then returns if the movement is valid, along with the occurance of the tile
+ * Resolve occurances
+ */
+int step(Trainer &player, vector<Trainer> &trainers, Map &map, int i){
     bool br = false;
     while(!br){
         //Keystroke madness
@@ -741,18 +787,202 @@ int step(Trainer player, vector<Trainer> trainers, Map map, int i){
         }
         else if(result == 3){
             cout << endl << "Your pokemon have been healed!" << endl;
+            int kk = 0;
             for(Pokemon p : player.pokemon){
                 for(int ii = 0; ii < 6; ii++){
                     if(p.getStat(ii) < p.getMaxStat(ii)){
                         p.setStat(ii, p.getMaxStat(ii));
                     }
                 }
+                player.pokemon.at(kk) = p;
+                kk++;
             }
 
             pokemanip(player, true);
+            cout << endl;
+            map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
         }
         else if(result == 4){
-            //gym things
+            int numBadges = player.getNumBadges();
+            int gym_count;
+            for(int ii = 0; ii < map.getMaxY(); ii++){
+                for(int jj = 0; jj < map.getMaxX(); jj++){
+                    if(map.tiles[ii][jj].getTerrain() == 'G'){
+                        gym_count++;
+                    }
+                }
+            }
+            if(numBadges < 8 && numBadges < gym_count){
+                vector<Trainer> gymTrainers;
+                for(int ii = 0; ii < 3; ii++){
+                    gymTrainers.push_back(Trainer());
+                    gymTrainers.at(ii).setName("Gym assistant");
+                    int numPokemon;
+                    if(numBadges < 4){
+                        numPokemon = 3;
+                    }
+                    else if(numBadges < 6){
+                        numPokemon = 4;
+                    }
+                    else{
+                        numPokemon = 5;
+                    }
+                    for(int jj = 0; jj < numPokemon; jj++){
+                        gymTrainers.at(ii).addPokemon(generatePokemon(player, 0));
+                    }
+                }
+                gymTrainers.push_back(Trainer());
+                string name;
+                string badge;
+                switch(numBadges){
+                    case 0:
+                        gymTrainers.at(3).setName("Brock");
+                        gymTrainers.at(3).addPokemon(Pokemon(95,12));
+                        gymTrainers.at(3).addPokemon(Pokemon(75,14));
+                        gymTrainers.at(3).addPokemon(Pokemon(111,14));
+                        badge = "Boulder badge";
+                        break;
+                    case 1:
+                        gymTrainers.at(3).setName("Misty");
+                        gymTrainers.at(3).addPokemon(Pokemon(61,17));
+                        gymTrainers.at(3).addPokemon(Pokemon(120,19));
+                        gymTrainers.at(3).addPokemon(Pokemon(73,21));
+                        gymTrainers.at(3).addPokemon(Pokemon(86,19));
+                        badge = "Cascade badge";
+                        break;
+                    case 2:
+                        gymTrainers.at(3).setName("Lt. Surge");
+                        gymTrainers.at(3).addPokemon(Pokemon(26,24));
+                        gymTrainers.at(3).addPokemon(Pokemon(25,20));
+                        gymTrainers.at(3).addPokemon(Pokemon(82,25));
+                        gymTrainers.at(3).addPokemon(Pokemon(101,24));
+                        badge = "Thunder badge";
+                        break;
+                    case 3:
+                        gymTrainers.at(3).setName("Erika");
+                        gymTrainers.at(3).addPokemon(Pokemon(44, 28));
+                        gymTrainers.at(3).addPokemon(Pokemon(46,28));
+                        gymTrainers.at(3).addPokemon(Pokemon(2,30));
+                        gymTrainers.at(3).addPokemon(Pokemon(71,30));
+                        gymTrainers.at(3).addPokemon(Pokemon(103,28));
+                        badge = "Rainbow badge";
+                        break;
+                    case 4:
+                        gymTrainers.at(3).setName("Koga");
+                        gymTrainers.at(3).addPokemon(Pokemon(89,32));
+                        gymTrainers.at(3).addPokemon(Pokemon(94,36));
+                        gymTrainers.at(3).addPokemon(Pokemon(42,33));
+                        gymTrainers.at(3).addPokemon(Pokemon(49,34));
+                        gymTrainers.at(3).addPokemon(Pokemon(24,35));
+                        badge = "Soul badge";
+                        break;
+                    case 5:
+                        gymTrainers.at(3).setName("Sabrina");
+                        gymTrainers.at(3).addPokemon(Pokemon(65, 39));
+                        gymTrainers.at(3).addPokemon(Pokemon(80, 36));
+                        gymTrainers.at(3).addPokemon(Pokemon(97,37));
+                        gymTrainers.at(3).addPokemon(Pokemon(103,38));
+                        gymTrainers.at(3).addPokemon(Pokemon(124,37));
+                        badge = "Marsh badge";
+                        break;
+                    case 6:
+                        gymTrainers.at(3).setName("Blaine");
+                        gymTrainers.at(3).addPokemon(Pokemon(78, 40));
+                        gymTrainers.at(3).addPokemon(Pokemon(38,42));
+                        gymTrainers.at(3).addPokemon(Pokemon(59,42));
+                        gymTrainers.at(3).addPokemon(Pokemon(6, 43));
+                        gymTrainers.at(3).addPokemon(Pokemon(126, 40));
+                        gymTrainers.at(3).addPokemon(Pokemon(136,41));
+                        badge = "Volcano badge";
+                        break;
+                    case 7:
+                        gymTrainers.at(3).setName("Giovanni");
+                        gymTrainers.at(3).addPokemon(Pokemon(28,45));
+                        gymTrainers.at(3).addPokemon(Pokemon(51,45));
+                        gymTrainers.at(3).addPokemon(Pokemon(76,47));
+                        gymTrainers.at(3).addPokemon(Pokemon(105,46));
+                        gymTrainers.at(3).addPokemon(Pokemon(112,48));
+                        gymTrainers.at(3).addPokemon(Pokemon(34,49));
+                        badge = "Earth badge";
+                        break;
+                    default:
+                        cout << "???" << endl;
+                }
+                int outcome;
+                Tile tile = Tile();
+                for(int jj = 0; jj < 4; jj++){
+                    outcome = encounter(player, gymTrainers.at(jj), tile, 0);
+                    if(outcome == -3){
+                        return outcome;
+                    }
+                    bag(player);
+                    pokemanip(player, false);
+                }
+                player.addBadge(badge);
+                cout << player.getName() << " recieved the " << badge << " from " << gymTrainers.at(3).getName() << "!" << endl;
+                map.tiles[player.getYPos()][player.getXPos()].setCompleted();
+                map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
+            }
+
+            // else{
+            //     cout << "You have beaten all the gyms. Now for your toughest challenge yet, the Elite Four!" << endl;
+            //     vector<Trainer> elitefour;
+            //     Trainer t1 = Trainer();
+            //     t1.setName("Elite Four Lorelei");
+            //     t1.addPokemon(Pokemon(87, 55));
+            //     t1.addPokemon(Pokemon(91,55));
+            //     t1.addPokemon(Pokemon(80,55));
+            //     t1.addPokemon(Pokemon(124,55));
+            //     t1.addPokemon(Pokemon(131,57));
+            //     elitefour.push_back(t1);
+            //     Trainer t2 = Trainer();
+            //     t2.setName("Elite Four Bruno");
+            //     t2.addPokemon(Pokemon(95, 55));
+            //     t2.addPokemon(Pokemon(106,55));
+            //     t2.addPokemon(Pokemon(107,55));
+            //     t2.addPokemon(Pokemon(95,55));
+            //     t2.addPokemon(Pokemon(68,57));
+            //     elitefour.push_back(t2);
+            //     Trainer t3 = Trainer();
+            //     t3.setName("Elite Four Agatha");
+            //     t3.addPokemon(Pokemon(94, 57));
+            //     t3.addPokemon(Pokemon(42,57));
+            //     t3.addPokemon(Pokemon(24,57));
+            //     t3.addPokemon(Pokemon(93,57));
+            //     t3.addPokemon(Pokemon(94,59));
+            //     elitefour.push_back(t3);
+            //     Trainer t4 = Trainer();
+            //     t4.setName("Elite Four Lance");
+            //     t4.addPokemon(Pokemon(130, 58));
+            //     t4.addPokemon(Pokemon(148,58));
+            //     t4.addPokemon(Pokemon(142,58));
+            //     t4.addPokemon(Pokemon(148,58));
+            //     t4.addPokemon(Pokemon(149,60));
+            //     elitefour.push_back(t4);
+            //     Trainer theChamp = Trainer();
+            //     theChamp.setName("Champion Blue");
+            //     theChamp.addPokemon(Pokemon(18,61));
+            //     theChamp.addPokemon(Pokemon(65,61));
+            //     theChamp.addPokemon(Pokemon(112,61));
+            //     theChamp.addPokemon(Pokemon(103,61));
+            //     theChamp.addPokemon(Pokemon(130,63));
+            //     theChamp.addPokemon(Pokemon(6,65));
+            //     elitefour.push_back(theChamp);
+
+            //     int outcome;
+            //     Tile tile = Tile();
+            //     for(int jj = 0; jj<5; jj++){
+            //         outcome = encounter(player, elitefour.at(jj), tile, 0);
+            //         if(outcome == -3){
+            //             return -3;
+            //         }
+            //         bag(player);
+            //         pokemanip(player, false);
+            //     }
+            //     cout << "Congratulations! You have emerged victorious and became the Indigo League Champion!" << endl;
+            //     cout << "You win!" << endl;
+            //     return 9001;
+            // }
         }
         else if(result == 5){
             //mart things
@@ -760,7 +990,11 @@ int step(Trainer player, vector<Trainer> trainers, Map map, int i){
         else if(result == 6){
             for(Trainer t : trainers){
                 if(t.getXPos() - player.getXPos() >= -1 && t.getXPos() - player.getXPos() <= 1 && t.getYPos() - player.getYPos() >= -1 && t.getYPos() - player.getYPos() <= 1){
-                    encounter(player, t, map.tiles[t.getYPos()][t.getXPos()],0);
+                    int outcome;
+                    outcome = encounter(player, t, map.tiles[t.getYPos()][t.getXPos()],0);
+                    if(outcome == -3){
+                        return -3;
+                    }
                     break;
                 }
             }
@@ -828,9 +1062,20 @@ int main(){
     map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
 
     bool quit = false;
+    int outcome;
     while(!quit){
-        if(step(player, trainers, map, rand()) == -3){
-            return 0;
+        outcome = step(player, trainers, map, rand());
+        if(outcome == -3){
+            quit = true;
+        }
+        else if(outcome == 9001){
+            cout << endl;
+            cout << "Game written by Nick Lumiere for his computer science project :P" << endl;
+            cout << "Pokemon by Game Freak" << endl;
+            string hi;
+            cin >> hi;
+            cout << "Thanks for spending way too much time on this game, you flatter me." << endl;
+            quit = true;
         }
     }
 
@@ -838,25 +1083,8 @@ int main(){
 }
 
 /**
- * Stuff I'm going to add
- * Put the player on a map
- * Put pokemon and trainers on a map, scattered randomly. Have a temporary terrain tile representing trainers and the player
- * Have the map only show 6 tiles in all directions of the player instead of the entire thing
- * Allow the player to move around
- *      Chance to encounter wild pokemon when in tall grass
- * 
- * Write a battle method for wild pokemon
- *      Use weighted random numbers to calculate the likelihood of attacking/fleeing
- *          Randomly select from viable tall grass tiles where the wild pokemon flees to
- *      Use weighted randomness to determine which moves to use
- *      Determine likelihood of capturing the wild pokemon
- *          Method for this too
- * Write a similar battle method for trainers
- *      Weighted randomness for how trainers choose the pokemon they send in
- * 
- * Allow player to buy items from shops when at shops
- * Allow player to heal and reorder *all* pokemon when at pokemon centers
- * Checks to see if there is certain terrain present to use additional functions
- * Implement additional battles for gym leaders
- * Implement additional battles for elite 4 and champion
+ * Marts
+ * Supereffective
+ * Evolution
+ * Fix bug where game ends when only 1 pokemon faints
  */

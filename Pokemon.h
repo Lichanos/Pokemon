@@ -35,6 +35,7 @@ class Pokemon{
         //IVs for stats
         int iv[6];
 
+        //Int which stores how many moves each pokemon knows
         int numMoves;
 
     public:
