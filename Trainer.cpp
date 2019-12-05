@@ -153,6 +153,10 @@ int Trainer::moveUp(Tile t, int i){
         yPos--;
         return 3;
     }
+    else if(t.getTerrain() == '$'){
+        yPos--;
+        return 5;
+    }
     else if(t.getTerrain() == 'G'){
         yPos--;
         if(t.getCompleted()){
@@ -191,6 +195,10 @@ int Trainer::moveDown(Tile t, int i){
     else if(t.getTerrain() == 'C'){
         yPos++;
         return 3;
+    }
+    else if(t.getTerrain() == '$'){
+        yPos++;
+        return 5;
     }
     else if(t.getTerrain() == 'G'){
         yPos++;
@@ -232,6 +240,10 @@ int Trainer::moveLeft(Tile t, int i){
         xPos--;
         return 3;
     }
+    else if(t.getTerrain() == '$'){
+        xPos--;
+        return 5;
+    }
     else if(t.getTerrain() == 'G'){
         xPos--;
         if(t.getCompleted()){
@@ -271,6 +283,10 @@ int Trainer::moveRight(Tile t, int i){
     else if(t.getTerrain() == 'C'){
         xPos++;
         return 3;
+    }
+    else if(t.getTerrain() == '$'){
+        xPos++;
+        return 5;
     }
     else if(t.getTerrain() == 'G'){
         xPos++;

@@ -19,6 +19,9 @@
 #include <stdio.h>
 using namespace std;
 
+/**
+ * Allows user to choose their name and starting pokemon
+ */
 Trainer welcome(){
     string username;
     int choice;
@@ -72,6 +75,10 @@ Trainer welcome(){
     return player;
 }
 
+/**
+ * Generates a random pokemon of random id
+ * Pokemon level around user level more or less
+ */
 Pokemon generatePokemon(Trainer &player, int i){
     int level;
     int id;
@@ -93,6 +100,12 @@ Pokemon generatePokemon(Trainer &player, int i){
     return Pokemon(id, level);
 }
 
+/**
+ * Allows the player to choose their active pokemon, ensuring valid user input
+ * If the party size is less than 6 iterate through all pokemon, otherwise, iterate through first 6
+ * Prints all non-fainted pokemon as options for player to select
+ * If all pokemon have fainted, and player arrives here due to one of their pokemon fainting, return -3 ending the game
+ */
 int chooseActive(Trainer &player, int curr_pokemon){
     cout << "Change active pokemon" << endl;
     bool fainted = true;
@@ -145,6 +158,10 @@ int chooseActive(Trainer &player, int curr_pokemon){
     return -1;
 }
 
+/**
+ * One pokemon doing damage to the other pokemon
+ * 4 options: If the move is a special attack, regular attack, self boosting attack, or enemy stat reducing attack
+ */
 void attack(Pokemon &p1, Pokemon &p2, int moveNum){
     int statAffected = p1.getMove(moveNum).getStatType();
     double damage_dealt;
@@ -166,6 +183,11 @@ void attack(Pokemon &p1, Pokemon &p2, int moveNum){
     cout << endl;
 }
 
+/**
+ * Prints useful information for user
+ * Allows user to pick an option of which action to perform
+ * Ensures valid user input
+ */
 int yourTurn(Trainer &player, Pokemon &p, int &player_pokemon){
     cout << "Your turn" << endl;
     cout << "Current Pokemon: " << (player.pokemon).at(player_pokemon).getName() << " Lv. " << (player.pokemon).at(player_pokemon).getLevel() << endl;
@@ -443,6 +465,12 @@ int encounter(Trainer &player, Pokemon &p, int i){
     return 0;
 }
 
+/**
+ * Starts an encounter with another trainer
+ * First move is dictated by the higher speed stat
+ * Moves are traded until one pokemon faints, or the user swaps their pokemon out
+ * Combat ends when all pokemon on one side faint
+ */
 int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
     cout << "You have been challenged by " << t.getName() << "!" << endl;
     cout << "Number of pokemon: " << t.pokemon.size() << endl;
@@ -488,6 +516,7 @@ int encounter(Trainer &player, Trainer &t, Tile &tile, int i){
                 if(outcome == 2){
                     int temp;
                     temp = chooseActive(player, player_pokemon);
+                    //Player loses if they run out of pokemon
                     if(temp == -3){
                         cout << "All of your pokemon have fainted. You lose. Thanks for playing!" << endl;
                         return -3;
@@ -597,6 +626,12 @@ void bag(Trainer &player){
     cout << endl;
 }
 
+/**
+ * Allows for manipulation of the pokemon vector
+ * Iterates through all pokemon if party size less than 6, or first 6 pokemon of vector
+ * Unless at a pokemon center, then iterates through everything
+ * Displays stats and allows for repositioning of party
+ */
 void pokemanip(Trainer &player, bool atMart){
     cout << endl;
     if(atMart || player.pokemon.size() < 6){
@@ -716,7 +751,24 @@ void pokemanip(Trainer &player, bool atMart){
     }
 }
 
-//i just for passing into generate pokemon
+//Buys a certain number of a certain thing
+void buyAThing(Trainer &player, string item, int quantity, int cost){
+    player.setMoney(player.getMoney() - cost*quantity);
+    bool exists = false;
+    int count = 0;
+    for(Item i : player.items){
+        if(i.getItemName() == item){
+            player.items.at(count).addNumber(quantity);
+            exists = true;
+            break;
+        }
+        count++;
+    }
+    if(!exists){
+        player.addItem(Item(item,quantity));
+    }
+}
+
 /**
  * The loop which runs the player move cycle
  * Gets input from user
@@ -724,7 +776,7 @@ void pokemanip(Trainer &player, bool atMart){
  * The move player function then returns if the movement is valid, along with the occurance of the tile
  * Resolve occurances
  */
-int step(Trainer &player, vector<Trainer> &trainers, Map &map, int i){
+int step(Trainer &player, vector<Trainer> &trainers, Map &map, vector<Trainer> &elitefour){
     bool br = false;
     while(!br){
         //Keystroke madness
@@ -812,6 +864,8 @@ int step(Trainer &player, vector<Trainer> &trainers, Map &map, int i){
                     }
                 }
             }
+            //Proceeds like a normal gym battle instead of battling the elite four
+            //3 tiny enemy trainers and 1 gym leader
             if(numBadges < 8 && numBadges < gym_count){
                 vector<Trainer> gymTrainers;
                 for(int ii = 0; ii < 3; ii++){
@@ -924,68 +978,122 @@ int step(Trainer &player, vector<Trainer> &trainers, Map &map, int i){
                 map.printMapAroundPlayer(player.getXPos(), player.getYPos(), trainers);
             }
 
-            // else{
-            //     cout << "You have beaten all the gyms. Now for your toughest challenge yet, the Elite Four!" << endl;
-            //     vector<Trainer> elitefour;
-            //     Trainer t1 = Trainer();
-            //     t1.setName("Elite Four Lorelei");
-            //     t1.addPokemon(Pokemon(87, 55));
-            //     t1.addPokemon(Pokemon(91,55));
-            //     t1.addPokemon(Pokemon(80,55));
-            //     t1.addPokemon(Pokemon(124,55));
-            //     t1.addPokemon(Pokemon(131,57));
-            //     elitefour.push_back(t1);
-            //     Trainer t2 = Trainer();
-            //     t2.setName("Elite Four Bruno");
-            //     t2.addPokemon(Pokemon(95, 55));
-            //     t2.addPokemon(Pokemon(106,55));
-            //     t2.addPokemon(Pokemon(107,55));
-            //     t2.addPokemon(Pokemon(95,55));
-            //     t2.addPokemon(Pokemon(68,57));
-            //     elitefour.push_back(t2);
-            //     Trainer t3 = Trainer();
-            //     t3.setName("Elite Four Agatha");
-            //     t3.addPokemon(Pokemon(94, 57));
-            //     t3.addPokemon(Pokemon(42,57));
-            //     t3.addPokemon(Pokemon(24,57));
-            //     t3.addPokemon(Pokemon(93,57));
-            //     t3.addPokemon(Pokemon(94,59));
-            //     elitefour.push_back(t3);
-            //     Trainer t4 = Trainer();
-            //     t4.setName("Elite Four Lance");
-            //     t4.addPokemon(Pokemon(130, 58));
-            //     t4.addPokemon(Pokemon(148,58));
-            //     t4.addPokemon(Pokemon(142,58));
-            //     t4.addPokemon(Pokemon(148,58));
-            //     t4.addPokemon(Pokemon(149,60));
-            //     elitefour.push_back(t4);
-            //     Trainer theChamp = Trainer();
-            //     theChamp.setName("Champion Blue");
-            //     theChamp.addPokemon(Pokemon(18,61));
-            //     theChamp.addPokemon(Pokemon(65,61));
-            //     theChamp.addPokemon(Pokemon(112,61));
-            //     theChamp.addPokemon(Pokemon(103,61));
-            //     theChamp.addPokemon(Pokemon(130,63));
-            //     theChamp.addPokemon(Pokemon(6,65));
-            //     elitefour.push_back(theChamp);
+            else{
+                cout << "You have beaten all the gyms. Now for your toughest challenge yet, the Elite Four!" << endl;
 
-            //     int outcome;
-            //     Tile tile = Tile();
-            //     for(int jj = 0; jj<5; jj++){
-            //         outcome = encounter(player, elitefour.at(jj), tile, 0);
-            //         if(outcome == -3){
-            //             return -3;
-            //         }
-            //         bag(player);
-            //         pokemanip(player, false);
-            //     }
-            //     cout << "Congratulations! You have emerged victorious and became the Indigo League Champion!" << endl;
-            //     cout << "You win!" << endl;
-            //     return 9001;
-            // }
+                int outcome;
+                Tile tile = Tile();
+                for(int jj = 0; jj<5; jj++){
+                    outcome = encounter(player, elitefour.at(jj), tile, 0);
+                    if(outcome == -3){
+                        return -3;
+                    }
+                    bag(player);
+                    pokemanip(player, false);
+                }
+                cout << "Congratulations! You have emerged victorious and became the Indigo League Champion!" << endl;
+                cout << "You win!" << endl;
+                return 9001;
+            }
         }
         else if(result == 5){
-            //mart things
+            bool quit = false;
+            while(!quit){
+                cout << endl << "What would you like to buy? (type \"exit\" to leave)" << endl;
+                cout << endl << "1. Potion" << endl;
+                cout << "2. Super Potion" << endl;
+                cout << "3. Hyper Potion" << endl;
+                cout << "4. Pokeball" << endl;
+                cout << "5. Great Ball" << endl;
+                cout << "6. Ultra Ball" << endl;
+                string item;
+                string reply;
+                cin >> reply;
+                if(reply == "1"){
+                    item = "Potion";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 100);
+                        }
+                    }
+                }
+                else if(reply == "2"){
+                    item = "Super Potion";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 200);
+                        }
+                    }
+                }
+                else if(reply == "3"){
+                    item = "Hyper Potion";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 300);
+                        }
+                    }
+                }
+                else if(reply == "4"){
+                    item = "Pokeball";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 100);
+                        }
+                    }
+                }
+                else if(reply == "5"){
+                    item = "Great Ball";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 200);
+                        }
+                    }
+                }
+                else if(reply == "6"){
+                    item = "Ultra Ball";
+                    cout << endl << "How many do you want to buy? (1-10)" << endl;
+                    cin >> reply;
+                    if(reply == "1" || reply == "2" || reply == "3" || reply == "4" || reply == "5" || reply == "6" || reply == "7" || reply == "8" || reply == "9" || reply == "10"){
+                        if(100*stoi(reply) > player.getMoney()){
+                            cout << "Too expensive!" << endl;
+                        }
+                        else{
+                            buyAThing(player, item, stoi(reply), 400);
+                        }
+                    }
+                }
+                else if(reply == "quit" || reply == "exit"){
+                    quit = true;
+                }
+                else{
+                    cout << "Invalid item" << endl;
+                }
+            }
         }
         else if(result == 6){
             for(Trainer t : trainers){
@@ -1003,7 +1111,55 @@ int step(Trainer &player, vector<Trainer> &trainers, Map &map, int i){
     return 0;
 }
 
+vector<Trainer> initializeEliteFour(){
+    vector<Trainer> elitefour;
+    Trainer t1 = Trainer();
+    t1.setName("Elite Four Lorelei");
+    t1.addPokemon(Pokemon(87, 55));
+    t1.addPokemon(Pokemon(91,55));
+    t1.addPokemon(Pokemon(80,55));
+    t1.addPokemon(Pokemon(124,55));
+    t1.addPokemon(Pokemon(131,57));
+    elitefour.push_back(t1);
+    Trainer t2 = Trainer();
+    t2.setName("Elite Four Bruno");
+    t2.addPokemon(Pokemon(95, 55));
+    t2.addPokemon(Pokemon(106,55));
+    t2.addPokemon(Pokemon(107,55));
+    t2.addPokemon(Pokemon(95,55));
+    t2.addPokemon(Pokemon(68,57));
+    elitefour.push_back(t2);
+    Trainer t3 = Trainer();
+    t3.setName("Elite Four Agatha");
+    t3.addPokemon(Pokemon(94, 57));
+    t3.addPokemon(Pokemon(42,57));
+    t3.addPokemon(Pokemon(24,57));
+    t3.addPokemon(Pokemon(93,57));
+    t3.addPokemon(Pokemon(94,59));
+    elitefour.push_back(t3);
+    Trainer t4 = Trainer();
+    t4.setName("Elite Four Lance");
+    t4.addPokemon(Pokemon(130, 58));
+    t4.addPokemon(Pokemon(148,58));
+    t4.addPokemon(Pokemon(142,58));
+    t4.addPokemon(Pokemon(148,58));
+    t4.addPokemon(Pokemon(149,60));
+    elitefour.push_back(t4);
+    Trainer theChamp = Trainer();
+    theChamp.setName("Champion Blue");
+    theChamp.addPokemon(Pokemon(18,61));
+    theChamp.addPokemon(Pokemon(65,61));
+    theChamp.addPokemon(Pokemon(112,61));
+    theChamp.addPokemon(Pokemon(103,61));
+    theChamp.addPokemon(Pokemon(130,63));
+    theChamp.addPokemon(Pokemon(6,65));
+    elitefour.push_back(theChamp);
+
+    return elitefour;
+}
+
 int main(){
+    vector<Trainer> eliteFour = initializeEliteFour();
     Trainer player = welcome();
     player.addItem(Item("Pokeball",10));
     player.addItem(Item("Potion",5));
@@ -1064,7 +1220,7 @@ int main(){
     bool quit = false;
     int outcome;
     while(!quit){
-        outcome = step(player, trainers, map, rand());
+        outcome = step(player, trainers, map, eliteFour);
         if(outcome == -3){
             quit = true;
         }
